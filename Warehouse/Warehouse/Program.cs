@@ -11,46 +11,43 @@ namespace WarehouseOOPMentoring
     {
         static void Main(string[] args)
         {
-            Warehouse sklad = new Warehouse(null, null, 0);
-            Menu(sklad);
+            Warehouse garage = new Warehouse(null, null, null);
+            Menu(garage);
             Console.ReadLine();
         }
         /// <summary>
         /// Object menu
         /// </summary>
         /// <param name="sklad">object</param>
-        public static void Menu(Warehouse sklad)
+        public static void Menu(Warehouse garage)
         {
             Console.WriteLine();
             Console.WriteLine("\t Menu");
             Console.WriteLine("1 - Add information");
-            Console.WriteLine("2 - Update information ");
-            Console.WriteLine("3 - Display your 'Title'");
-            Console.WriteLine("4 - Display your 'Address'");
-            Console.WriteLine("5 - Display your 'Contact number'");
-            Console.WriteLine("6 - Exit");
+            Console.WriteLine("2 - Update menu");
+            Console.WriteLine("3 - Display menu");
+            Console.WriteLine("4 - Exit");
             Console.Write("Enter your choise: ");
-            int choise = int.Parse(Console.ReadLine());
+            string  choise = Console.ReadLine();
+            int.TryParse(choise,out int number);
             Console.WriteLine();
-            switch (choise)
+            switch (number)
             {
                 case 1:
-                    AddInformation(sklad);
+                    AddInformation(garage);
                     break;
                 case 2:
-                    UpdateInformation(sklad);
+                    UpdateInformation(garage);
                     break;
                 case 3:
-                    DisplayTitle(sklad);
+                    DisplayMenu(garage);
                     break;
                 case 4:
-                    DisplayAddress(sklad);
-                    break;
-                case 5:
-                    DisplayContuctNumber(sklad);
-                    break;
-                case 6:
                     Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Unknown command");
+                    Menu(garage);
                     break;
             }
         }
@@ -58,26 +55,47 @@ namespace WarehouseOOPMentoring
         /// Create you own objects
         /// </summary>
         /// <returns>object</returns>
-        public static Warehouse AddInformation(Warehouse sklad)
+        public static Warehouse AddInformation(Warehouse garage)
         {
-            Console.Write("Enter title of warehouse: ");
-            string title = Console.ReadLine();
-
-            Console.Write("Enter address of warehouse: ");
-            string address = Console.ReadLine();
-
-            Console.Write("Enter contact number of warehouse: ");
-            int contactNumber = int.Parse(Console.ReadLine());
-
-            sklad = new Warehouse(title, address, contactNumber);
-            Menu(sklad);
-            return sklad;
+            string title = null;
+            string address = null;
+            string contactNumber = null;
+            while (string.IsNullOrEmpty(title))
+            {
+                Console.Write("Enter 'Title' of warehouse: ");
+                title = Console.ReadLine();
+                if(string.IsNullOrEmpty(title))
+                {
+                    Console.WriteLine("'Title' can not be empty");
+                }
+            }
+            while (string.IsNullOrEmpty(address))
+            {
+                Console.Write("Enter 'Address' of warehouse: ");
+                address = Console.ReadLine();
+                if (string.IsNullOrEmpty(address))
+                {
+                    Console.WriteLine("'Address' can not be empty");
+                }
+            }
+            while (string.IsNullOrEmpty(contactNumber))
+            {
+                Console.Write("Enter 'Contact number' of warehouse: ");
+                contactNumber = Console.ReadLine();
+                if (string.IsNullOrEmpty(contactNumber))
+                {
+                    Console.WriteLine("'Contact number' can not be empty");
+                }
+            }
+            garage = new Warehouse(title, address, contactNumber);
+            Menu(garage);
+            return garage;
         }
         /// <summary>
         /// Update information in object
         /// </summary>
         /// <param name="sklad">object</param>
-        public static void UpdateInformation(Warehouse sklad)
+        public static void UpdateInformation(Warehouse garage)
         {
             Console.WriteLine("\t Update Menu");
             Console.WriteLine("1 - Update 'Title'");
@@ -85,55 +103,117 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("3 - Update 'Contact number'");
             Console.WriteLine("4 - Return to 'Menu'");
             Console.Write("Enter your choise: ");
-            int choise = int.Parse(Console.ReadLine());
-            switch (choise)
+            string choise = Console.ReadLine();
+            int.TryParse(choise, out int number);
+            switch (number)
             {
                 case 1:
                     Console.Write("Enter new 'Title': ");
-                    string title = Console.ReadLine();
-                    sklad.Title = title;
-                    Menu(sklad);
+                    garage.Title = Console.ReadLine();
+                    while (string.IsNullOrEmpty(garage.Title))
+                    {
+                        if (string.IsNullOrEmpty(garage.Title))
+                        {
+                            Console.WriteLine("New 'Title' can not be empty");
+                            garage.Title = Console.ReadLine();
+                        }
+                    }
+                    Menu(garage);
                     break;
                 case 2:
                     Console.Write("Enter new 'Address': ");
-                    string address = Console.ReadLine();
-                    sklad.Address = address;
-                    Menu(sklad);
+                    garage.Address = Console.ReadLine();
+                    while (string.IsNullOrEmpty(garage.Address))
+                    {
+                        if (string.IsNullOrEmpty(garage.Address))
+                        {
+                            Console.WriteLine("New 'Address' can not be empty");
+                        }
+                    }
+                    Menu(garage);
                     break;
                 case 3:
                     Console.Write("Enter new 'Contact number': ");
-                    int contactNumber = int.Parse(Console.ReadLine());
-                    sklad.ContactNumber = contactNumber;
-                    Menu(sklad);
+                    garage.ContactNumber = Console.ReadLine();
+                    while (string.IsNullOrEmpty(garage.ContactNumber))
+                    {
+                        if (string.IsNullOrEmpty(garage.ContactNumber))
+                        {
+                            Console.WriteLine("New 'Address' can not be empty");
+                        }
+                    }
+                    Menu(garage);
+                    break;
+                case 4:
+                    Menu(garage);
                     break;
                 default:
-                    Menu(sklad);
+                    Console.WriteLine("Unknown command");
+                    Menu(garage);
                     break;
             }
         }
         /// <summary>
+        /// Display to console 'Display menu'
+        /// </summary>
+        /// <param name="garage">object</param>
+        public static void DisplayMenu(Warehouse garage)
+        {
+            Console.WriteLine("\t Display Menu");
+            Console.WriteLine("1 - Display 'Title'");
+            Console.WriteLine("2 - Display 'Address'");
+            Console.WriteLine("3 - Display 'Contact number'");
+            Console.WriteLine("4 - Return to 'Menu'");
+            Console.Write("Enter your choise: ");
+            string choise = Console.ReadLine();
+            int.TryParse(choise, out int number);
+            switch (number)
+            {
+                case 1:
+                    DisplayTitle(garage);
+                    Menu(garage);
+                    break;
+                case 2:
+                    DisplayAddress(garage);
+                    Menu(garage);
+                    break;
+                case 3:
+                    DisplayContuctNumber(garage);
+                    Menu(garage);
+                    break;
+                case 4:
+                    Menu(garage);
+                    break;
+                default:
+                    Console.WriteLine("Unknown command");
+                    Menu(garage);
+                    break;
+            }
+        }
+    
+        /// <summary>
         /// Display to console warehouse 'title'
         /// </summary>
-        public static void DisplayTitle(Warehouse sklad)
+        public static void DisplayTitle(Warehouse garage)
         {
-            Console.WriteLine($"Warehouse title: '{sklad.Title}'");
-            Menu(sklad);
+            Console.WriteLine($"Warehouse title: '{garage.Title}'");
+            Menu(garage);
         }
         /// <summary>
         /// Display to console warehouse 'adress'
         /// </summary>
-        public static void DisplayAddress(Warehouse sklad)
+        public static void DisplayAddress(Warehouse garage)
         {
-            Console.WriteLine($"Warehouse address: {sklad.Address}");
-            Menu(sklad);
+            Console.WriteLine($"Warehouse address: {garage.Address}");
+            Menu(garage);
         }
         /// <summary>
         /// Display to console warehouse 'contuct number'
         /// </summary>
-        public static void DisplayContuctNumber(Warehouse sklad)
+        public static void DisplayContuctNumber(Warehouse garage)
         {
-            Console.WriteLine($"Warehouse contuct number: {sklad.ContactNumber}");
-            Menu(sklad);
+            Console.WriteLine($"Warehouse contuct number: {garage.ContactNumber}");
+            Menu(garage);
         }
     }
 }

@@ -10,9 +10,9 @@ namespace Warehouse_infrastructure
     {
         public string Title { get; set; }
         public string Address { get; set; }
-        public int ContactNumber { get; set; }
+        public string ContactNumber { get; set; }
 
-        public Warehouse(string title, string address, int contactNumber)
+        public Warehouse(string title, string address, string contactNumber)
         {
             this.Title = title;
             this.Address = address;
