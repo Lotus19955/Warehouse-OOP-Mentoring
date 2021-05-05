@@ -9,12 +9,20 @@ namespace WarehouseOOPMentoring
 {
     class Program
     {
-        private static  Warehouse garage = null;
+        private static Warehouse garage = null;
+        private static Employees[] Employees;
+
         private static void Main(string[] args)
         {
+            CreateEmployees();
             CreateObject();
             Menu();
             Console.ReadLine();
+        }
+        private static void DisplayFreeVacations(Warehouse garage)
+        {
+            Console.WriteLine($"Number of free vacation: {garage.Vacation}");
+            Menu();
         }
         /// <summary>
         /// Create you own objects
@@ -23,7 +31,7 @@ namespace WarehouseOOPMentoring
         private static void CreateObject()
         {
             Console.WriteLine("First you need to add information about warehouse");
-            Console.Write($"Enter '{nameof(garage.Title)}' of warehouse: "); 
+            Console.Write($"Enter '{nameof(garage.Title)}' of warehouse: ");
             string title = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Title));
 
             Console.Write($"Enter '{nameof(garage.Address)}' of warehouse: ");
@@ -44,10 +52,12 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("\t Menu");
             Console.WriteLine("1 - Update menu");
             Console.WriteLine("2 - Display menu");
-            Console.WriteLine("3 - Exit");
+            Console.WriteLine("3 - Display number of free vacations");
+            Console.WriteLine("4 - Clear information about warehouse");
+            Console.WriteLine("5 - Exit");
             Console.Write("Enter your choise: ");
-            string  choise = Console.ReadLine();
-            int.TryParse(choise,out int number);
+            string choise = Console.ReadLine();
+            int.TryParse(choise, out int number);
             Console.WriteLine();
             switch (number)
             {
@@ -58,6 +68,13 @@ namespace WarehouseOOPMentoring
                     DisplayMenu(garage);
                     break;
                 case 3:
+                    DisplayFreeVacations(garage);
+                    break;
+                case 4:
+                    ClearInfoAboutWarehouse(garage);
+                    Menu();
+                    break;
+                case 5:
                     Environment.Exit(0);
                     break;
                 default:
@@ -89,7 +106,7 @@ namespace WarehouseOOPMentoring
                     break;
                 case 2:
                     Console.Write("Enter new 'Address': ");
-                    garage.Address = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Address)); 
+                    garage.Address = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Address));
                     Menu();
                     break;
                 case 3:
@@ -131,7 +148,7 @@ namespace WarehouseOOPMentoring
                     Menu();
                     break;
                 case 3:
-                    Display(garage.Number,nameof(garage.Number));
+                    Display(garage.Number, nameof(garage.Number));
                     Menu();
                     break;
                 case 4:
@@ -152,6 +169,12 @@ namespace WarehouseOOPMentoring
         {
             Console.WriteLine($"Warehouse {paramName}: {param} ");
         }
+        private static void ClearInfoAboutWarehouse(Warehouse garage)
+        {
+            garage.Title = null;
+            garage.Address = null;
+            garage.Number = null;
+        }
         /// <summary>
         /// Check objects parameters for null or empty
         /// </summary>
@@ -167,6 +190,11 @@ namespace WarehouseOOPMentoring
                 param = Console.ReadLine();
             }
             return param;
+        }
+        private static void CreateEmployees()
+        {
+            Employees = new Employees[garage.Vacation];
+            Employees[0] = new Employees("Andrei", "Yermalovich", 26, "Director", "Minsk", "1556677", "Higher");
         }
     }
 }
