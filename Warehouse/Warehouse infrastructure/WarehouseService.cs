@@ -6,67 +6,78 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class WarehouseService 
+    public class WarehouseService
     {
         /// <summary>
         /// Create you warehouse objects
         /// </summary>
         /// <returns>object</returns>
         /// <returns>object</returns>
-        public void CreateWarehouse(ref Warehouse garage)
+        public Warehouse CreateWarehouse(ref Warehouse garage)
         {
             Console.WriteLine("First you need to add information about warehouse");
-            Console.Write($"Enter '{nameof(garage.Title)}' of warehouse: ");
-            string title = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Title));
+            Console.Write($"Enter '{nameof(Warehouse.Title)}' of warehouse: ");
+            string title = TrySetValue(Console.ReadLine(), nameof(Warehouse.Title));
 
-            Console.Write($"Enter '{nameof(garage.Address)}' of warehouse: ");
-            string address = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Address));
+            Console.Write($"Enter '{nameof(Warehouse.Address)}' of warehouse: ");
+            string address = TrySetValue(Console.ReadLine(), nameof(Warehouse.Address));
 
-            Console.Write($"Enter  'Contact {nameof(garage.Number)}' of warehouse: ");
-            string number = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Number));
+            Console.Write($"Enter  'Contact {nameof(Warehouse.Number)}' of warehouse: ");
+            string number = TrySetValue(Console.ReadLine(), nameof(Warehouse.Number));
 
-            garage = new Warehouse(title, address, number);
-            garage.Employee = new Employees[10];
+            Console.Write($"Enter  numbers of free '{nameof(Warehouse.Vacation)}' of warehouse: ");
+            string  freevacation= TrySetValue(Console.ReadLine(), nameof(Warehouse.Vacation));
+            int.TryParse(freevacation, out int vacation);
+            garage = new Warehouse(title, address, number, vacation);
+            return garage;
         }
         /// <summary>
         /// Create you employee object
         /// </summary>
         /// <returns>object</returns>
-        public void CreateEmployees(Warehouse garage)
+        public void CreateEmployee(Warehouse garage)
         {
-            garage.Employee[0] = new Employees("Andrei", "Yermalovich", 26, "Director", "Minsk", "1234567", "Higher");  // for TEST
-            garage.Employee[6] = new Employees("Fred", "Yog", 21, "Cleaner", "Minsk", "9876543", "Middle");             // for TEST
-            garage.Employee[7] = new Employees("Greg", "Gog", 27, "Storekeeper", "Minsk", "4563782", "Higher");         // for TEST
-            garage.Employee[8] = new Employees("Alis", "Vangog", 30, "Accountant", "Minsk", "1598673", "Higher");       // for TEST
-            for (int i = 0; i < garage.Employee.Length; i++)
+            if (garage.Vacation != 0)
             {
-                if (garage.Employee[i] == null)
+                Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
+                string name = TrySetValue(Console.ReadLine(), nameof(Employee.Name));
+
+                Console.Write($"Enter '{nameof(Employee.Surname)}' of employee: ");
+                string surname = TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
+
+                Console.Write($"Enter 'Contact {nameof(Employee.Age)}' of employee: ");
+                string intAge = TrySetValue(Console.ReadLine(), nameof(Employee.Age));
+                int.TryParse(intAge, out int age);
+
+                Console.Write($"Enter '{nameof(Employee.Job)}' of employee: ");
+                string job = TrySetValue(Console.ReadLine(), nameof(Employee.Job));
+
+                Console.Write($"Enter '{nameof(Employee.Address)}' of employee: ");
+                string address = TrySetValue(Console.ReadLine(), nameof(Employee.Address));
+
+                Console.Write($"Enter 'Contact {nameof(Employee.Number)}' of employee: ");
+                string number = TrySetValue(Console.ReadLine(), nameof(Employee.Number));
+
+                Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
+                string education = TrySetValue(Console.ReadLine(), nameof(Employee.Education));
+                if (!ValidationEmployee(garage))
                 {
-                    Console.Write($"Enter '{nameof(Employees.Name)}' of employee: ");
-                    string name = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Name));
-
-                    Console.Write($"Enter '{nameof(Employees.Surname)}' of employee: ");
-                    string surname = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Surname));
-
-                    Console.Write($"Enter 'Contact {nameof(Employees.Age)}' of employee: ");
-                    string intAge = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Age));
-                    int.TryParse(intAge, out int age);
-
-                    Console.Write($"Enter '{nameof(Employees.Job)}' of employee: ");
-                    string job = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Job));
-
-                    Console.Write($"Enter '{nameof(Employees.Address)}' of employee: ");
-                    string homeAddress = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Address));
-
-                    Console.Write($"Enter 'Contact {nameof(Employees.Number)}' of employee: ");
-                    string contactNumber = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Number));
-
-                    Console.Write($"Enter '{nameof(Employees.Education)}' of employee: ");
-                    string education = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Education));
-
-                    garage.Employee[i] = new Employees(name, surname, age, job, homeAddress, contactNumber, education);
-                    break;
+                    garage.Employee = new Employee[1];
+                    garage.Employee[0] = new Employee(name, surname, age, job, address, number, education);
+                    garage.UpdateVatarion(garage.Vacation - 1);
                 }
+                else
+                {
+                    var arrayEmployee = garage.Employee;
+                    Array.Resize(ref arrayEmployee, garage.Employee.Length + 1);
+                    garage.Employee = arrayEmployee;
+                    garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
+                    garage.UpdateVatarion(garage.Vacation - 1);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No free vacation");
             }
         }
         /// <summary>
@@ -79,7 +90,8 @@ namespace Warehouse_infrastructure
             Console.WriteLine($"1 - Update '{nameof(garage.Title)}'");
             Console.WriteLine($"2 - Update '{nameof(garage.Address)}'");
             Console.WriteLine($"3 - Update 'Contact {nameof(garage.Number)}'");
-            Console.WriteLine("4 - Return to 'Menu'");
+            Console.WriteLine($"4 - Update number of free '{nameof(garage.Vacation)}'");
+            Console.WriteLine("5 - Return to 'Menu'");
             Console.Write("Enter your choise: ");
             string choise = Console.ReadLine();
             int.TryParse(choise, out int number);
@@ -88,17 +100,22 @@ namespace Warehouse_infrastructure
             {
                 case 1:
                     Console.Write("Enter new 'Title': ");
-                    garage.Title = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Title));
+                    garage.Title = TrySetValue(Console.ReadLine(), nameof(garage.Title));
                     break;
                 case 2:
                     Console.Write("Enter new 'Address': ");
-                    garage.Address = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Address));
+                    garage.Address = TrySetValue(Console.ReadLine(), nameof(garage.Address));
                     break;
                 case 3:
                     Console.Write("Enter new 'Contact number': ");
-                    garage.Number = ValidationForNullOrEmpty(Console.ReadLine(), nameof(garage.Number));
+                    garage.Number = TrySetValue(Console.ReadLine(), nameof(garage.Number));
                     break;
                 case 4:
+                    Console.Write("Enter new number of free 'Vacation': ");
+                    int.TryParse(TrySetValue(Console.ReadLine(), nameof(garage.Vacation)), out int vacation);
+                    garage.UpdateVatarion(vacation);
+                    break;
+                case 5:
                     break;
                 default:
                     Console.WriteLine("Unknown command");
@@ -117,7 +134,8 @@ namespace Warehouse_infrastructure
             Console.WriteLine($"3 - Display 'Contact {nameof(garage.Number)}'");
             Console.WriteLine($"4 - Display 'Employees information'");
             Console.WriteLine($"5 - Display number of '{nameof(garage.Vacation)}'");
-            Console.WriteLine("6 - Return to 'Menu'");
+            Console.WriteLine($"6 - Display all information");
+            Console.WriteLine("7 - Return to 'Menu'");
             Console.Write("Enter your choise: ");
             string choise = Console.ReadLine();
             Console.WriteLine();
@@ -140,6 +158,51 @@ namespace Warehouse_infrastructure
                     DisplayFreeVacations(garage);
                     break;
                 case 6:
+                    Display(garage);
+                    break;
+                case 7:
+                    break;
+                default:
+                    Console.WriteLine("Unknown command");
+                    break;
+            }
+        }
+        /// <summary>
+        /// Display to console 'Employee menu'
+        /// </summary>
+        /// <param name="garage">object</param>
+        public void EmployeeMenu(Warehouse garage)
+        {
+            Console.WriteLine("\t Employee Menu");
+            Console.WriteLine($"1 - Display number of free'{nameof(garage.Vacation)}'");
+            Console.WriteLine($"2 - Display all '{nameof(garage.Employee)}'");
+            Console.WriteLine($"3 - Create new employee");
+            Console.WriteLine($"4 - Find {nameof(garage.Employee)} by name and surname'");
+            Console.WriteLine($"5 - Remove '{nameof(garage.Employee)}'");
+            Console.WriteLine($"6 - Display number of '{nameof(garage.Vacation)}'");
+            Console.WriteLine("7 - Return to 'Menu'");
+            Console.Write("Enter your choise: ");
+            string choise = Console.ReadLine();
+            Console.WriteLine();
+            int.TryParse(choise, out int number);
+            switch (number)
+            {
+                case 1:
+                    DisplayFreeVacations(garage);
+                    break;
+                case 2:
+                    DisplayWarehouseEmployee(garage);
+                    break;
+                case 3:
+                    CreateEmployee(garage);
+                    break;
+                case 4:
+                    SearchEmployeesByNameAndSurname(garage);
+                    break;
+                case 6:
+                    RemoveEmployee(garage);
+                    break;
+                case 7:
                     break;
                 default:
                     Console.WriteLine("Unknown command");
@@ -151,9 +214,19 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="param">gets object parameters</param>
         /// <param name="paramName">gets 'Names' of object parameters</param>
-        public static void Display(string param, string paramName)
+        public  void Display(string param, string paramName)
         {
             Console.WriteLine($"Warehouse {paramName}: {param} ");
+        }
+        public  void Display(Warehouse garage)
+        {
+            Console.Write($" Warehouse Title: {garage.Title}\t " +
+                       $" Warehouse address: {garage.Address}\t " +
+                       $" Warehouse number: {garage.Number}\t " +
+                       $" Number of free vacations:{garage.Vacation}");
+            Console.WriteLine("Information about empolees:");
+            DisplayWarehouseEmployee(garage);
+            Console.WriteLine();
         }
         /// <summary>
         /// Display to console informations about free vacations 
@@ -161,18 +234,7 @@ namespace Warehouse_infrastructure
         /// <param name="garage">object</param>
         public void DisplayFreeVacations(Warehouse garage)
         {
-            int counter = garage.Vacation;
-            if (garage.Employee !=null)
-            {
-                for (int i = 0; i < garage.Employee.Length; i++)
-                {
-                    if (garage.Employee[i] != null)
-                    {
-                        counter--;
-                    }
-                }
-            }
-            Console.WriteLine($"Number of free vacation: {counter}");
+            Console.WriteLine($"Number of free vacation: {garage.Vacation}");
         }
         /// <summary>
         /// Display to console information about employees
@@ -180,26 +242,25 @@ namespace Warehouse_infrastructure
         /// <param name="employees">object</param>
         public void DisplayWarehouseEmployee(Warehouse garage)
         {
-            if (ValidationEmployees(garage))
+            int number = 1;
+            if (ValidationEmployee(garage))
             {
-                Console.WriteLine("There are no employees. First, you need to hire it.");
+                foreach (var employee in garage.Employee)
+                {
+                    Console.WriteLine($"{number}) Name:{employee.Name} " +
+                        $" Surname:{employee.Surname} " +
+                        $" Age:{employee.Age} " +
+                        $" Position:{employee.Job} " +
+                        $" Address:{employee.Address} " +
+                        $" Number:{employee.Number} " +
+                        $" Education:{employee.Education} ");
+                    Console.WriteLine();
+                    number++;
+                }
             }
             else
             {
-                for (int i = 0; i < garage.Employee.Length; i++)
-                {
-                    if (garage.Employee[i] != null)
-                    {
-                        Console.WriteLine($"{i}) Name:{garage.Employee[i].Name} " +
-                            $" Surname:{garage.Employee[i].Surname} " +
-                            $" Age:{garage.Employee[i].Age} " +
-                            $" Position:{garage.Employee[i].Job} " +
-                            $" Address:{garage.Employee[i].Address} " +
-                            $" Number:{garage.Employee[i].Number} " +
-                            $" Education:{garage.Employee[i].Education} ");
-                        Console.WriteLine();
-                    }
-                }
+                Console.WriteLine("There are no employees. First, you need to hire it.");
             }
         }
         /// <summary>
@@ -209,8 +270,8 @@ namespace Warehouse_infrastructure
         /// <param name="employees">object</param>
         public void ClearInfoAboutWarehouse(ref Warehouse garage)
         {
-            garage = new Warehouse(null,null,null);
-            garage.Employee = new Employees[10];
+            garage = null;
+            Console.WriteLine("Clear info success");
         }
         /// <summary>
         /// Find employee by 'Name' and 'Surname' in employee array
@@ -218,32 +279,31 @@ namespace Warehouse_infrastructure
         /// <param name="employees">object</param>
         public void SearchEmployeesByNameAndSurname(Warehouse garage)
         {
-            if (ValidationEmployees(garage))
+            if (ValidationEmployee(garage))
             {
-                Console.WriteLine("There are no employees. First, you need to hire it.");
+                Console.WriteLine($"Enter employee '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}' to find");
+                Console.Write($"Enter '{nameof(Employee.Name)}': ");
+                string name = TrySetValue(Console.ReadLine(), nameof(Employee.Name));
+                Console.Write($"Enter '{nameof(Employee.Surname)}': ");
+                string surname = TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
+                foreach (Employee employee in garage.Employee)
+                {
+                    if (employee.Name == name && employee.Surname == surname)
+                    {
+                        Console.WriteLine($"Name:{employee.Name} " +
+                            $" Surname:{employee.Surname} " +
+                            $" Age:{employee.Age} " +
+                            $" Position:{employee.Job} " +
+                            $" Address:{employee.Address} " +
+                            $" Number:{employee.Number} " +
+                            $" Education:{employee.Education} ");
+                    }
+                }
+                Console.WriteLine($"There is no employee with a name: {name}, surname: {surname}");
             }
             else
             {
-                Console.WriteLine($"Enter employee '{nameof(Employees.Name)}' and '{nameof(Employees.Surname)}' to find");
-                Console.Write($"Enter '{nameof(Employees.Name)}': ");
-                string findName = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Name));
-                Console.Write($"Enter '{nameof(Employees.Surname)}': ");
-                string findSurname = ValidationForNullOrEmpty(Console.ReadLine(), nameof(Employees.Surname));
-                bool validation;
-                for (int i = 0; i < garage.Employee.Length; i++)
-                {
-                    validation = (garage.Employee[i] != null) && (findName == garage.Employee[i].Name) && (findSurname == garage.Employee[i].Surname);
-                    if (validation)
-                    {
-                        Console.WriteLine($"Name:{garage.Employee[i].Name} " +
-                        $" Surname:{garage.Employee[i].Surname} " +
-                        $" Age:{garage.Employee[i].Age} " +
-                        $" Position:{garage.Employee[i].Job} " +
-                        $" Address:{garage.Employee[i].Address} " +
-                        $" Number:{garage.Employee[i].Number} " +
-                        $" Education:{garage.Employee[i].Education} ");
-                    }
-                }
+                Console.WriteLine("There are no employees. First, you need to hire it.");
             }
         }
         /// <summary>
@@ -252,34 +312,33 @@ namespace Warehouse_infrastructure
         /// <param name="employees">object</param>
         public void RemoveEmployee(Warehouse garage)
         {
-            if (ValidationEmployees(garage))
-            {
-                Console.WriteLine("There are no employees. First, you need to hire it.");
-            }
-            else
+            if (ValidationEmployee(garage))
             {
                 DisplayWarehouseEmployee(garage);
                 Console.Write("Enter number witch employes you need to fire: ");
                 string choice = Console.ReadLine();
-                int.TryParse(choice, out int intChoice);
-                bool validation = (intChoice > garage.Employee.Length - 1) | (intChoice < -1); // need fixes, I don't know how to do correct validation
-                if (validation)
+                if (int.TryParse(choice, out int intChoice))
                 {
-                    Console.WriteLine("Enter correct number");
-                    Console.WriteLine();
-                    RemoveEmployee(garage);
+                    if (intChoice < garage.Employee.Length && intChoice >= 1)
+                    {
+                        int x;
+                        int index = intChoice--;
+                        garage.Employee[index] = null;
+                        for (int i = 0; i < garage.Employee.Length; i++)
+                        {
+                            x = intChoice;
+                            intChoice = index;
+                            index = x;
+                        }
+                        var arrayEmployee = garage.Employee;
+                        Array.Resize(ref arrayEmployee, garage.Employee.Length - 1);
+                        garage.UpdateVatarion(garage.Vacation + 1);
+                    }
                 }
-                if (garage.Employee[intChoice] == null)
-                {
-                    Console.WriteLine("Enter correct number");
-                    Console.WriteLine();
-                    RemoveEmployee(garage);
-                }
-                else 
-                {
-                    garage.Employee[intChoice] = null;
-                    Console.WriteLine("Remove success");
-                }
+            }
+            else
+            {
+                Console.WriteLine("There are no employees. First, you need to hire it.");
             }
         }
         /// <summary>
@@ -288,7 +347,7 @@ namespace Warehouse_infrastructure
         /// <param name="param">gets object parameters</param>
         /// <param name="paramName">gets 'Names' of object parameters</param>
         /// <returns></returns>
-        private string ValidationForNullOrEmpty(string param, string paramName)
+        private string TrySetValue(string param, string paramName)
         {
             while (string.IsNullOrEmpty(param))
             {
@@ -303,17 +362,9 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="garage">object</param>
         /// <returns></returns>
-        private bool ValidationEmployees (Warehouse garage)
+        private bool ValidationEmployee (Warehouse garage)
         {
-            bool nullChecking = true;
-            for (int i = 0; i < garage.Employee.Length; i++)
-            {
-                if(garage.Employee[i] != null)
-                {
-                    nullChecking = false;
-                }
-            }
-            return nullChecking;
+            return garage.Employee != null && garage.Employee.Length > 0;
         }
     }
 }

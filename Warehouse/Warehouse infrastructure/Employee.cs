@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class Employees
+    public class Employee
     {
         private string name;
         private string surname;
@@ -50,7 +50,7 @@ namespace Warehouse_infrastructure
             get { return education; }
             set { education = value; }
         }
-        public Employees(string name, string surname, int age, string job, string address, string number, string education)
+        public Employee(string name, string surname, int age, string job, string address, string number, string education)
         {
             this.Name = name;
             this.Surname = surname;

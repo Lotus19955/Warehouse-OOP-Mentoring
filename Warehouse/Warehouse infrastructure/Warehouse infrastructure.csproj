@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="WarehouseService.cs" />
-    <Compile Include="Employees.cs" />
+    <Compile Include="Employee.cs" />
     <Compile Include="Warehouse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
