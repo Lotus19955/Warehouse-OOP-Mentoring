@@ -11,6 +11,8 @@ namespace Warehouse_infrastructure
         private string title;
         private string address;
         private string number;
+        private int vacation;
+        private Employee[] employee;
         public string Title 
         {
             get { return title; }
@@ -26,12 +28,26 @@ namespace Warehouse_infrastructure
             get { return number; }
             set { number = value; }
         }
-
-        public Warehouse(string title, string address, string number)
+        public int Vacation
+        {
+            get { return vacation; }
+            private set { vacation = value; }
+        }
+        public Employee[] Employee
+        {
+            get { return employee; }
+            set { employee = value; }
+        }
+        public Warehouse(string title, string address, string number, int vacation)
         {
             this.Title = title;
             this.Address = address;
             this.Number = number;
+            this.Vacation = vacation;
+        }
+        public void UpdateVatarion(int number)
+        {
+            this.Vacation = number;
         }
     }
 }
