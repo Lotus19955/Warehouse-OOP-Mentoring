@@ -37,43 +37,60 @@ namespace Warehouse_infrastructure
         /// <returns>object</returns>
         public void CreateEmployee(Warehouse garage)
         {
-            if (garage.Vacation != 0)
+            Console.WriteLine($"Number of free vacations: {garage.Vacation}");
+            Console.Write("Now many employees do you want to add: ");
+            string  intEmployeeNumber= TrySetValue(Console.ReadLine(), "Number of emplyoee");
+            bool result = int.TryParse(intEmployeeNumber, out int employeeNumber);
+            if (result == true && employeeNumber <= garage.Vacation)
             {
-                Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
-                string name = TrySetValue(Console.ReadLine(), nameof(Employee.Name));
-
-                Console.Write($"Enter '{nameof(Employee.Surname)}' of employee: ");
-                string surname = TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
-
-                Console.Write($"Enter 'Contact {nameof(Employee.Age)}' of employee: ");
-                string intAge = TrySetValue(Console.ReadLine(), nameof(Employee.Age));
-                int.TryParse(intAge, out int age);
-
-                Console.Write($"Enter '{nameof(Employee.Job)}' of employee: ");
-                string job = TrySetValue(Console.ReadLine(), nameof(Employee.Job));
-
-                Console.Write($"Enter '{nameof(Employee.Address)}' of employee: ");
-                string address = TrySetValue(Console.ReadLine(), nameof(Employee.Address));
-
-                Console.Write($"Enter 'Contact {nameof(Employee.Number)}' of employee: ");
-                string number = TrySetValue(Console.ReadLine(), nameof(Employee.Number));
-
-                Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
-                string education = TrySetValue(Console.ReadLine(), nameof(Employee.Education));
-                if (!ValidationEmployee(garage))
+                for (int i = 0; i < employeeNumber; i++)
                 {
-                    garage.Employee = new Employee[1];
-                    garage.Employee[0] = new Employee(name, surname, age, job, address, number, education);
-                    garage.UpdateVatarion(garage.Vacation - 1);
+
+                    Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
+                    string name = TrySetValue(Console.ReadLine(), nameof(Employee.Name));
+
+                    Console.Write($"Enter '{nameof(Employee.Surname)}' of employee: ");
+                    string surname = TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
+
+                    Console.Write($"Enter 'Contact {nameof(Employee.Age)}' of employee: ");
+                    string intAge = TrySetValue(Console.ReadLine(), nameof(Employee.Age));
+                    int.TryParse(intAge, out int age);
+
+                    Console.Write($"Enter '{nameof(Employee.Job)}' of employee: ");
+                    string job = TrySetValue(Console.ReadLine(), nameof(Employee.Job));
+
+                    Console.Write($"Enter '{nameof(Employee.Address)}' of employee: ");
+                    string address = TrySetValue(Console.ReadLine(), nameof(Employee.Address));
+
+                    Console.Write($"Enter 'Contact {nameof(Employee.Number)}' of employee: ");
+                    string number = TrySetValue(Console.ReadLine(), nameof(Employee.Number));
+
+                    Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
+                    string education = TrySetValue(Console.ReadLine(), nameof(Employee.Education));
+                    if (!ValidationEmployee(garage))
+                    {
+                        garage.Employee = new Employee[1];
+                        garage.Employee[0] = new Employee(name, surname, age, job, address, number, education);
+                        garage.UpdateVatarion(garage.Vacation - 1);
+                        Console.WriteLine("Employee created!");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        var arrayEmployee = garage.Employee;
+                        Array.Resize(ref arrayEmployee, garage.Employee.Length + 1);
+                        garage.Employee = arrayEmployee;
+                        garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
+                        garage.UpdateVatarion(garage.Vacation - 1);
+                        Console.WriteLine("Employee created!");
+                        Console.WriteLine();
+                    }
                 }
-                else
-                {
-                    var arrayEmployee = garage.Employee;
-                    Array.Resize(ref arrayEmployee, garage.Employee.Length + 1);
-                    garage.Employee = arrayEmployee;
-                    garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
-                    garage.UpdateVatarion(garage.Vacation - 1);
-                }
+            }
+            if (result == false)
+            {
+                Console.WriteLine("Unknown command");
+                return;
             }
             else
             {
