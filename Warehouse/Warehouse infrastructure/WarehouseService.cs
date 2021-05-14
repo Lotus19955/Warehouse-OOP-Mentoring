@@ -25,10 +25,10 @@ namespace Warehouse_infrastructure
             Console.Write($"Enter  'Contact {nameof(Warehouse.Number)}' of warehouse: ");
             string number = TrySetValue(Console.ReadLine(), nameof(Warehouse.Number));
 
-            Console.Write($"Enter  numbers of free '{nameof(Warehouse.Vacation)}' of warehouse: ");
-            string  freevacation= TrySetValue(Console.ReadLine(), nameof(Warehouse.Vacation));
-            int.TryParse(freevacation, out int vacation);
-            garage = new Warehouse(title, address, number, vacation);
+            Console.Write($"Enter  numbers of free '{nameof(Warehouse.Vacancy)}' of warehouse: ");
+            string freevacancy = TrySetValue(Console.ReadLine(), nameof(Warehouse.Vacancy));
+            int.TryParse(freevacancy, out int vacancy);
+            garage = new Warehouse(title, address, number, vacancy);
             return garage;
         }
         /// <summary>
@@ -37,65 +37,68 @@ namespace Warehouse_infrastructure
         /// <returns>object</returns>
         public void CreateEmployee(Warehouse garage)
         {
-            Console.WriteLine($"Number of free vacations: {garage.Vacation}");
+            Console.WriteLine($"Number of free vacancy: {garage.Vacancy}");
             Console.Write("Now many employees do you want to add: ");
-            string  intEmployeeNumber= TrySetValue(Console.ReadLine(), "Number of emplyoee");
-            bool result = int.TryParse(intEmployeeNumber, out int employeeNumber);
-            if (result == true && employeeNumber <= garage.Vacation)
+            string intEmployeeNumber = TrySetValue(Console.ReadLine(), "Number of emplyoee");
+            if (int.TryParse(intEmployeeNumber, out int employeeNumber))
             {
-                for (int i = 0; i < employeeNumber; i++)
+                if (employeeNumber <= garage.Vacancy)
                 {
-
-                    Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
-                    string name = TrySetValue(Console.ReadLine(), nameof(Employee.Name));
-
-                    Console.Write($"Enter '{nameof(Employee.Surname)}' of employee: ");
-                    string surname = TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
-
-                    Console.Write($"Enter 'Contact {nameof(Employee.Age)}' of employee: ");
-                    string intAge = TrySetValue(Console.ReadLine(), nameof(Employee.Age));
-                    int.TryParse(intAge, out int age);
-
-                    Console.Write($"Enter '{nameof(Employee.Job)}' of employee: ");
-                    string job = TrySetValue(Console.ReadLine(), nameof(Employee.Job));
-
-                    Console.Write($"Enter '{nameof(Employee.Address)}' of employee: ");
-                    string address = TrySetValue(Console.ReadLine(), nameof(Employee.Address));
-
-                    Console.Write($"Enter 'Contact {nameof(Employee.Number)}' of employee: ");
-                    string number = TrySetValue(Console.ReadLine(), nameof(Employee.Number));
-
-                    Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
-                    string education = TrySetValue(Console.ReadLine(), nameof(Employee.Education));
-                    if (!ValidationEmployee(garage))
+                    for (int i = 0; i < employeeNumber; i++)
                     {
-                        garage.Employee = new Employee[1];
-                        garage.Employee[0] = new Employee(name, surname, age, job, address, number, education);
-                        garage.UpdateVatarion(garage.Vacation - 1);
-                        Console.WriteLine("Employee created!");
-                        Console.WriteLine();
-                    }
-                    else
-                    {
-                        var arrayEmployee = garage.Employee;
-                        Array.Resize(ref arrayEmployee, garage.Employee.Length + 1);
-                        garage.Employee = arrayEmployee;
-                        garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
-                        garage.UpdateVatarion(garage.Vacation - 1);
-                        Console.WriteLine("Employee created!");
-                        Console.WriteLine();
+
+                        Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
+                        string name = TrySetValue(Console.ReadLine(), nameof(Employee.Name));
+
+                        Console.Write($"Enter '{nameof(Employee.Surname)}' of employee: ");
+                        string surname = TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
+
+                        Console.Write($"Enter 'Contact {nameof(Employee.Age)}' of employee: ");
+                        string intAge = TrySetValue(Console.ReadLine(), nameof(Employee.Age));
+                        int.TryParse(intAge, out int age);
+
+                        Console.Write($"Enter '{nameof(Employee.Job)}' of employee: ");
+                        string job = TrySetValue(Console.ReadLine(), nameof(Employee.Job));
+
+                        Console.Write($"Enter '{nameof(Employee.Address)}' of employee: ");
+                        string address = TrySetValue(Console.ReadLine(), nameof(Employee.Address));
+
+                        Console.Write($"Enter 'Contact {nameof(Employee.Number)}' of employee: ");
+                        string number = TrySetValue(Console.ReadLine(), nameof(Employee.Number));
+
+                        Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
+                        string education = TrySetValue(Console.ReadLine(), nameof(Employee.Education));
+                        if (!ValidationEmployee(garage))
+                        {
+                            garage.Employee = new Employee[1];
+                            garage.Employee[0] = new Employee(name, surname, age, job, address, number, education);
+                            garage.UptadeVacancy(garage.Vacancy - 1);
+                            Console.WriteLine("Employee created!");
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            var arrayEmployee = garage.Employee;
+                            Array.Resize(ref arrayEmployee, garage.Employee.Length + 1);
+                            garage.Employee = arrayEmployee;
+                            garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
+                            garage.UptadeVacancy(garage.Vacancy - 1);
+                            Console.WriteLine("Employee created!");
+                            Console.WriteLine();
+                        }
                     }
                 }
-            }
-            if (result == false)
+                else
+                {
+                    Console.WriteLine("No free vacancy");
+                }
+            } 
+            else
             {
                 Console.WriteLine("Unknown command");
                 return;
             }
-            else
-            {
-                Console.WriteLine("No free vacation");
-            }
+            
         }
         /// <summary>
         /// Update information in object
@@ -107,7 +110,7 @@ namespace Warehouse_infrastructure
             Console.WriteLine($"1 - Update '{nameof(garage.Title)}'");
             Console.WriteLine($"2 - Update '{nameof(garage.Address)}'");
             Console.WriteLine($"3 - Update 'Contact {nameof(garage.Number)}'");
-            Console.WriteLine($"4 - Update number of free '{nameof(garage.Vacation)}'");
+            Console.WriteLine($"4 - Update number of free '{nameof(garage.Vacancy)}'");
             Console.WriteLine("5 - Return to 'Menu'");
             Console.Write("Enter your choise: ");
             string choise = Console.ReadLine();
@@ -128,9 +131,9 @@ namespace Warehouse_infrastructure
                     garage.Number = TrySetValue(Console.ReadLine(), nameof(garage.Number));
                     break;
                 case 4:
-                    Console.Write("Enter new number of free 'Vacation': ");
-                    int.TryParse(TrySetValue(Console.ReadLine(), nameof(garage.Vacation)), out int vacation);
-                    garage.UpdateVatarion(vacation);
+                    Console.Write("Enter new number of free 'Vacancy': ");
+                    int.TryParse(TrySetValue(Console.ReadLine(), nameof(garage.Vacancy)), out int vacancy);
+                    garage.UptadeVacancy(vacancy);
                     break;
                 case 5:
                     break;
@@ -150,7 +153,7 @@ namespace Warehouse_infrastructure
             Console.WriteLine($"2 - Display '{nameof(garage.Address)}'");
             Console.WriteLine($"3 - Display 'Contact {nameof(garage.Number)}'");
             Console.WriteLine($"4 - Display 'Employees information'");
-            Console.WriteLine($"5 - Display number of '{nameof(garage.Vacation)}'");
+            Console.WriteLine($"5 - Display number of '{nameof(garage.Vacancy)}'");
             Console.WriteLine($"6 - Display all information");
             Console.WriteLine("7 - Return to 'Menu'");
             Console.Write("Enter your choise: ");
@@ -172,7 +175,7 @@ namespace Warehouse_infrastructure
                     DisplayWarehouseEmployee(garage);
                     break;
                 case 5:
-                    DisplayFreeVacations(garage);
+                    DisplayFreeVacancy(garage);
                     break;
                 case 6:
                     Display(garage);
@@ -191,12 +194,12 @@ namespace Warehouse_infrastructure
         public void EmployeeMenu(Warehouse garage)
         {
             Console.WriteLine("\t Employee Menu");
-            Console.WriteLine($"1 - Display number of free'{nameof(garage.Vacation)}'");
+            Console.WriteLine($"1 - Display number of free'{nameof(garage.Vacancy)}'");
             Console.WriteLine($"2 - Display all '{nameof(garage.Employee)}'");
             Console.WriteLine($"3 - Create new employee");
             Console.WriteLine($"4 - Find {nameof(garage.Employee)} by name and surname'");
             Console.WriteLine($"5 - Remove '{nameof(garage.Employee)}'");
-            Console.WriteLine($"6 - Display number of '{nameof(garage.Vacation)}'");
+            Console.WriteLine($"6 - Display number of '{nameof(garage.Vacancy)}'");
             Console.WriteLine("7 - Return to 'Menu'");
             Console.Write("Enter your choise: ");
             string choise = Console.ReadLine();
@@ -205,7 +208,7 @@ namespace Warehouse_infrastructure
             switch (number)
             {
                 case 1:
-                    DisplayFreeVacations(garage);
+                    DisplayFreeVacancy(garage);
                     break;
                 case 2:
                     DisplayWarehouseEmployee(garage);
@@ -240,18 +243,18 @@ namespace Warehouse_infrastructure
             Console.Write($" Warehouse Title: {garage.Title}\t " +
                        $" Warehouse address: {garage.Address}\t " +
                        $" Warehouse number: {garage.Number}\t " +
-                       $" Number of free vacations:{garage.Vacation}");
+                       $" Number of free vacancy:{garage.Vacancy}");
             Console.WriteLine("Information about empolees:");
             DisplayWarehouseEmployee(garage);
             Console.WriteLine();
         }
         /// <summary>
-        /// Display to console informations about free vacations 
+        /// Display to console informations about free vacancy 
         /// </summary>
         /// <param name="garage">object</param>
-        public void DisplayFreeVacations(Warehouse garage)
+        public void DisplayFreeVacancy(Warehouse garage)
         {
-            Console.WriteLine($"Number of free vacation: {garage.Vacation}");
+            Console.WriteLine($"Number of free vacancy: {garage.Vacancy}");
         }
         /// <summary>
         /// Display to console information about employees
@@ -349,7 +352,7 @@ namespace Warehouse_infrastructure
                         }
                         var arrayEmployee = garage.Employee;
                         Array.Resize(ref arrayEmployee, garage.Employee.Length - 1);
-                        garage.UpdateVatarion(garage.Vacation + 1);
+                        garage.UptadeVacancy(garage.Vacancy + 1);
                     }
                 }
             }
