@@ -10,10 +10,11 @@ namespace WarehouseOOPMentoring
     class Program
     {
         private static Warehouse garage = null;
-        private static WarehouseService service = new WarehouseService();
+        private static WarehouseService warehouseService = new WarehouseService();
+        private static EmployeeService employeeService = new EmployeeService();
         private static void Main(string[] args)
         {
-            service.CreateWarehouse(ref garage);
+            warehouseService.CreateWarehouse(ref garage);
             Menu(garage);
             Console.ReadLine();
         }
@@ -23,6 +24,7 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void Menu(Warehouse garage)
         {
+            
             while (true)
             { 
             Console.WriteLine();
@@ -40,17 +42,17 @@ namespace WarehouseOOPMentoring
                 switch (number)
                 {
                     case 1:
-                        service.UpdateMenu(garage);
+                        warehouseService.UpdateMenu(garage);
                         break;
                     case 2:
-                        service.DisplayMenu(garage);
+                        warehouseService.DisplayMenu(garage);
                         break;
                     case 3:
-                        service.EmployeeMenu(garage);
+                        employeeService.EmployeeMenu(garage);
                         break;
                     case 4:
-                        service.ClearInfoAboutWarehouse(ref garage);
-                        garage = service.CreateWarehouse(ref garage);
+                        warehouseService.ClearInfoAboutWarehouse(ref garage);
+                        garage = warehouseService.CreateWarehouse(ref garage);
                         break;
                     case 5:
                         Environment.Exit(0);
