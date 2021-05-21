@@ -38,7 +38,7 @@ namespace WarehouseOOPMentoring
             string choise = Console.ReadLine();
             int.TryParse(choise, out int number);
             Console.WriteLine(); 
-                Console.Clear();
+            Console.Clear();
                 switch (number)
                 {
                     case 1:
