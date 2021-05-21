@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class Validation
+    public class ValidationService
     {
         /// <summary>
         /// Check objects parameters for null or empty
@@ -32,7 +32,7 @@ namespace Warehouse_infrastructure
         /// <returns></returns>
         public int TrySetNumber(string param, string paramName)
         {
-            while (true) // Подумать над логикой цикла!
+            while (true)
             {
                 if (int.TryParse(param, out int number))
                 {

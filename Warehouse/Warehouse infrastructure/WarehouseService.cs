@@ -8,7 +8,7 @@ namespace Warehouse_infrastructure
 {
     public class WarehouseService : EmployeeService
     {
-        private static Validation val = new Validation();
+        private static ValidationService validationService = new ValidationService();
         /// <summary>
         /// Create you warehouse objects
         /// </summary>
@@ -18,16 +18,16 @@ namespace Warehouse_infrastructure
         {
             Console.WriteLine("First you need to add information about warehouse");
             Console.Write($"Enter '{nameof(Warehouse.Title)}' of warehouse: ");
-            string title = val.TrySetValue(Console.ReadLine(), nameof(Warehouse.Title));
+            string title = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Title));
 
             Console.Write($"Enter '{nameof(Warehouse.Address)}' of warehouse: ");
-            string address = val.TrySetValue(Console.ReadLine(), nameof(Warehouse.Address));
+            string address = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Address));
 
             Console.Write($"Enter  'Contact {nameof(Warehouse.Number)}' of warehouse: ");
-            string number = val.TrySetValue(Console.ReadLine(), nameof(Warehouse.Number));
+            string number = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Number));
 
             Console.Write($"Enter  numbers of free '{nameof(Warehouse.Vacancy)}' of warehouse: ");
-            string freevacancy = val.TrySetValue(Console.ReadLine(), nameof(Warehouse.Vacancy));
+            string freevacancy = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Vacancy));
             int.TryParse(freevacancy, out int vacancy);
             garage = new Warehouse(title, address, number, vacancy);
             return garage;
@@ -52,19 +52,19 @@ namespace Warehouse_infrastructure
             {
                 case 1:
                     Console.Write("Enter new 'Title': ");
-                    garage.Title = val.TrySetValue(Console.ReadLine(), nameof(garage.Title));
+                    garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
                     break;
                 case 2:
                     Console.Write("Enter new 'Address': ");
-                    garage.Address = val.TrySetValue(Console.ReadLine(), nameof(garage.Address));
+                    garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
                     break;
                 case 3:
                     Console.Write("Enter new 'Contact number': ");
-                    garage.Number = val.TrySetValue(Console.ReadLine(), nameof(garage.Number));
+                    garage.Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Number));
                     break;
                 case 4:
                     Console.Write("Enter new number of free 'Vacancy': ");
-                    int.TryParse(val.TrySetValue(Console.ReadLine(), nameof(garage.Vacancy)), out int vacancy);
+                    int.TryParse(validationService.TrySetValue(Console.ReadLine(), nameof(garage.Vacancy)), out int vacancy);
                     garage.UptadeVacancy(vacancy);
                     break;
                 case 5:

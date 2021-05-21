@@ -32,6 +32,11 @@ namespace Warehouse_infrastructure
             get { return education; }
             set { education = value; }
         }
+        public Guid ID
+        {
+            get { return id; }
+            private set { id = value; }
+        }
         public Employee(string name, string surname, int age, string job, string address, string number, string education)
             : base (name, surname, age)
         {

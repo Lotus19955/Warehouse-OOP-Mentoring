@@ -8,7 +8,7 @@ namespace Warehouse_infrastructure
 {
     public class EmployeeService
     {
-        private static Validation val = new Validation();
+        private static ValidationService validationService = new ValidationService();
         /// <summary>
         /// Create you employee object
         /// </summary>
@@ -17,44 +17,39 @@ namespace Warehouse_infrastructure
         {
             Console.WriteLine($"Number of free vacancy: {garage.Vacancy}");
             Console.Write("Now many employees do you want to add: ");
-            string intEmployeeNumber = val.TrySetValue(Console.ReadLine(), "Number of emplyoee");
+            string intEmployeeNumber = validationService.TrySetValue(Console.ReadLine(), "Number of emplyoee");
             if (int.TryParse(intEmployeeNumber, out int employeeNumber))
             {
                 if (employeeNumber <= garage.Vacancy)
                 {
-                    for (int i = 0; i < employeeNumber; i++)
+                    if (!validationService.ValidationEmployee(garage))
                     {
-                        if (!val.ValidationEmployee(garage))
-                        {
-                            garage.Employee = new Employee[1];
-                        }
-                        else
-                        {
-                            Warehouse arrayEmployee = garage;
-                            val.Resize(arrayEmployee, 1);
-                            garage = arrayEmployee;
-                        }
+                        garage.Employee = new Employee[0];
+                    }
+                    for (int i = 0; i < employeeNumber; i++)
+                    { 
+                        validationService.Resize(garage, 1);
 
                         Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
-                        string name = val.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
+                        string name = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
 
                         Console.Write($"Enter '{nameof(Employee.Surname)}' of employee: ");
-                        string surname = val.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
+                        string surname = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
 
                         Console.Write($"Enter '{nameof(Employee.Age)}' of employee: ");
-                        int age = val.TrySetNumber(Console.ReadLine(), nameof(Employee.Age));
+                        int age = validationService.TrySetNumber(Console.ReadLine(), nameof(Employee.Age));
 
                         Console.Write($"Enter '{nameof(Employee.Job)}' of employee: ");
-                        string job = val.TrySetValue(Console.ReadLine(), nameof(Employee.Job));
+                        string job = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Job));
 
                         Console.Write($"Enter '{nameof(Employee.Address)}' of employee: ");
-                        string address = val.TrySetValue(Console.ReadLine(), nameof(Employee.Address));
+                        string address = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Address));
 
                         Console.Write($"Enter 'Contact {nameof(Employee.Number)}' of employee: ");
-                        string number = val.TrySetValue(Console.ReadLine(), nameof(Employee.Number));
+                        string number = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Number));
 
                         Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
-                        string education = val.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
+                        string education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
                         
                         garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
                         garage.UptadeVacancy(garage.Vacancy - 1);
@@ -80,7 +75,7 @@ namespace Warehouse_infrastructure
         public void EmployeeMenu(Warehouse garage)
         {
             Console.WriteLine("\t Employee Menu");
-            Console.WriteLine($"1 - Create new employee");
+            Console.WriteLine($"1 - Create new 'Employee'");
             Console.WriteLine($"2 - Find {nameof(garage.Employee)} by name and surname'");
             Console.WriteLine($"3 - Remove '{nameof(garage.Employee)}'");
             Console.WriteLine("4 - Return to 'Menu'");
@@ -106,6 +101,7 @@ namespace Warehouse_infrastructure
                     break;
             }
         }
+        
         /// <summary>
         /// Display to console information about employees
         /// </summary>
@@ -113,11 +109,12 @@ namespace Warehouse_infrastructure
         public void DisplayWarehouseEmployee(Warehouse garage)
         {
             int number = 1;
-            if (val.ValidationEmployee(garage))
+            if (validationService.ValidationEmployee(garage))
             {
                 foreach (var employee in garage.Employee)
                 {
-                    Console.WriteLine($"{number}) Name:{employee.Name} " +
+                    Console.WriteLine($"{number})");
+                    Console.WriteLine($" Name:{employee.Name} " +
                         $" Surname:{employee.Surname} " +
                         $" Age:{employee.Age} " +
                         $" Position:{employee.Job} " +
@@ -139,13 +136,13 @@ namespace Warehouse_infrastructure
         /// <param name="employees">object</param>
         public void SearchEmployeesByNameAndSurname(Warehouse garage)
         {
-            if (val.ValidationEmployee(garage))
+            if (validationService.ValidationEmployee(garage))
             {
                 Console.WriteLine($"Enter employee '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}' to find");
                 Console.Write($"Enter '{nameof(Employee.Name)}': ");
-                string name = val.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
+                string name = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
                 Console.Write($"Enter '{nameof(Employee.Surname)}': ");
-                string surname = val.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
+                string surname = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
                 foreach (Employee employee in garage.Employee)
                 {
                     if (employee.Name == name && employee.Surname == surname)
@@ -172,7 +169,7 @@ namespace Warehouse_infrastructure
         /// <param name="employees">object</param>
         public void RemoveEmployee(Warehouse garage)
         {
-            if (val.ValidationEmployee(garage))
+            if (validationService.ValidationEmployee(garage))
             {
                 DisplayWarehouseEmployee(garage);
                 Console.Write("Enter number witch employes you need to fire: ");
