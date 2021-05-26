@@ -24,17 +24,15 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void Menu(Warehouse garage)
         {
-            
             while (true)
             { 
-            Console.WriteLine();
-            Console.WriteLine("\t Menu");
+            Console.WriteLine("\n\t Main Menu");
             Console.WriteLine("1 - Update menu");
             Console.WriteLine("2 - Display menu");
             Console.WriteLine("3 - Employee menu");
             Console.WriteLine("4 - Clear information about warehouse");
             Console.WriteLine("5 - Exit");
-            Console.Write("Enter your choise: ");
+            Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             int.TryParse(choise, out int number);
             Console.WriteLine(); 
@@ -58,7 +56,7 @@ namespace WarehouseOOPMentoring
                         Environment.Exit(0);
                         break;
                     default:
-                        Console.WriteLine("Unknown command");
+                        Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
                         break;
                 }
             }

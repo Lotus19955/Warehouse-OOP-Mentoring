@@ -16,13 +16,14 @@ namespace Warehouse_infrastructure
         /// <returns></returns>
         public string TrySetValue(string param, string paramName)
         {
-            while (string.IsNullOrEmpty(param))
+            if (!string.IsNullOrEmpty(param))
             {
+                return param;
+            }
                 Console.WriteLine($"{paramName} can not be empty");
                 Console.Write($"Enter '{paramName}': ");
                 param = Console.ReadLine();
-            }
-            return param;
+                return TrySetValue(param, paramName);
         }
         /// <summary>
         /// Check objects parameters for 0 or empty
@@ -30,17 +31,18 @@ namespace Warehouse_infrastructure
         /// <param name="param">gets object parameters</param>
         /// <param name="paramName">gets 'Names' of object parameters</param>
         /// <returns></returns>
-        public int TrySetNumber(string param, string paramName)
+        public int TrySetNumber(string param , string paramName)
         {
-            while (true)
+            if (int.TryParse(param, out int number))
             {
-                if (int.TryParse(param, out int number))
-                {
-                    return number;
-                }
+                return number;
+            }
+            else
+            {
                 Console.WriteLine($"{paramName} is incorrect value");
                 Console.Write($"Enter '{paramName}': ");
                 param = Console.ReadLine();
+                return TrySetNumber(param, paramName);
             }
         }
         /// <summary>
@@ -53,9 +55,9 @@ namespace Warehouse_infrastructure
             return garage.Employee != null && garage.Employee.Length > 0;
         }
         /// <summary>
-        /// Resize Employee Array
+        /// Resize Array
         /// </summary>
-        /// <param name="garage">Employee Array</param>
+        /// <param name="garage">Array</param>
         /// <param name="size">number of elements you need to add </param>
         public void Resize(Warehouse garage, int size)
         {
@@ -65,6 +67,20 @@ namespace Warehouse_infrastructure
                 temp[i] = garage.Employee[i];
             }
             garage.Employee = temp;
+        }
+        /// <summary>
+        /// Resize Employee Array
+        /// </summary>
+        /// <param name="garage">Employee Array</param>
+        /// <param name="size">number of elements you need to add </param>
+        public void Resize(ref Employee[] employee, int size)
+        {
+            Employee[] temp = new Employee[employee.Length + size];
+            for (int i = 0; i < employee.Length; i++)
+            {
+                temp[i] = employee[i];
+            }
+            employee = temp;
         }
     }
 }

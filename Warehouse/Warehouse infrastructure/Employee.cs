@@ -12,7 +12,6 @@ namespace Warehouse_infrastructure
         private string address;
         private string number;
         private string education;
-        private Guid id;
         public string Job
         {
             get { return job; }
@@ -33,19 +32,13 @@ namespace Warehouse_infrastructure
             get { return education; }
             set { education = value; }
         }
-        public Guid ID
-        {
-            get { return id; }
-            private set { id = value; }
-        }
         public Employee(Guid id, string name, string surname, int age, string job, string address, string number, string education)
-            : base(name, surname, age)
+            : base(id, name, surname, age)
         {
             this.Job = job;
             this.Address = address;
             this.Number = number;
             this.Education = education;
-            this.ID = id;
         }
     }
 }

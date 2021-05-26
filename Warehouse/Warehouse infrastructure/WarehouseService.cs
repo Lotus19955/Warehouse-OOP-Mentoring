@@ -27,50 +27,55 @@ namespace Warehouse_infrastructure
             string number = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Number));
 
             Console.Write($"Enter  numbers of free '{nameof(Warehouse.Vacancy)}' of warehouse: ");
-            string freevacancy = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Vacancy));
-            int.TryParse(freevacancy, out int vacancy);
+            int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Vacancy)); 
             garage = new Warehouse(title, address, number, vacancy);
             return garage;
         }
         /// <summary>
-        /// Update information in object
+        /// Display to console 'Update menu'
         /// </summary>
         /// <param name="garage">object</param>
         public void UpdateMenu(Warehouse garage)
         {
-            Console.WriteLine("\t Update Menu");
+            Console.WriteLine("\n\t Update Menu");
             Console.WriteLine($"1 - Update '{nameof(garage.Title)}'");
             Console.WriteLine($"2 - Update '{nameof(garage.Address)}'");
             Console.WriteLine($"3 - Update 'Contact {nameof(garage.Number)}'");
             Console.WriteLine($"4 - Update number of free '{nameof(garage.Vacancy)}'");
-            Console.WriteLine("5 - Return to 'Menu'");
-            Console.Write("Enter your choise: ");
+            Console.WriteLine($"5 - {AlertsConstants.RETURN_TO_MAIN_MENU}");
+            Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             int.TryParse(choise, out int number);
             Console.WriteLine();
+            Console.Clear();
             switch (number)
             {
                 case 1:
                     Console.Write("Enter new 'Title': ");
                     garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
+                    UpdateMenu(garage);
                     break;
                 case 2:
                     Console.Write("Enter new 'Address': ");
                     garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
+                    UpdateMenu(garage);
                     break;
                 case 3:
                     Console.Write("Enter new 'Contact number': ");
                     garage.Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Number));
+                    UpdateMenu(garage);
                     break;
                 case 4:
                     Console.Write("Enter new number of free 'Vacancy': ");
-                    int.TryParse(validationService.TrySetValue(Console.ReadLine(), nameof(garage.Vacancy)), out int vacancy);
-                    garage.UptadeVacancy(vacancy);
+                    int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Vacancy));
+                    UpdateMenu(garage);
+                    garage.UpdateVacancy(vacancy);
                     break;
                 case 5:
                     break;
                 default:
-                    Console.WriteLine("Unknown command");
+                    Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                    UpdateMenu(garage);
                     break;
             }
         }
@@ -80,38 +85,45 @@ namespace Warehouse_infrastructure
         /// <param name="garage">object</param>
         public void DisplayMenu(Warehouse garage)
         {
-            Console.WriteLine("\t Display Menu");
+            Console.WriteLine("\n\t Display Menu");
             Console.WriteLine($"1 - Display '{nameof(garage.Title)}'");
             Console.WriteLine($"2 - Display '{nameof(garage.Address)}'");
             Console.WriteLine($"3 - Display 'Contact {nameof(garage.Number)}'");
             Console.WriteLine($"4 - Display number of '{nameof(garage.Vacancy)}'");
             Console.WriteLine($"5 - Display all information");
-            Console.WriteLine("6 - Return to 'Menu'");
-            Console.Write("Enter your choise: ");
+            Console.WriteLine($"6 - {AlertsConstants.RETURN_TO_MAIN_MENU}");
+            Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
             int.TryParse(choise, out int number);
+            Console.Clear();
             switch (number)
             {
                 case 1:
                     Display(garage.Title, nameof(garage.Title));
+                    DisplayMenu(garage);
                     break;
                 case 2:
                     Display(garage.Address, nameof(garage.Address));
+                    DisplayMenu(garage);
                     break;
                 case 3:
                     Display(garage.Number, nameof(garage.Number));
+                    DisplayMenu(garage);
                     break;
                 case 4:
                     DisplayFreeVacancy(garage);
+                    DisplayMenu(garage);
                     break;
                 case 5:
                     Display(garage);
+                    DisplayMenu(garage);
                     break;
                 case 6:
                     break;
                 default:
-                    Console.WriteLine("Unknown command");
+                    Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                    DisplayMenu(garage);
                     break;
             }
         }
