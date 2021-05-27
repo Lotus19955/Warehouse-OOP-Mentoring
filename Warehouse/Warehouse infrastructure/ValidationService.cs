@@ -31,7 +31,7 @@ namespace Warehouse_infrastructure
         /// <param name="param">gets object parameters</param>
         /// <param name="paramName">gets 'Names' of object parameters</param>
         /// <returns></returns>
-        public int TrySetNumber(string param , string paramName)
+        public int TrySetNumber(string param, string paramName)
         {
             if (int.TryParse(param, out int number))
             {

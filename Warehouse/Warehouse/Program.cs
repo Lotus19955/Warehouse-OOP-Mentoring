@@ -32,7 +32,7 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("3 - Employee menu");
             Console.WriteLine("4 - Clear information about warehouse");
             Console.WriteLine("5 - Exit");
-            Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
+            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             int.TryParse(choise, out int number);
             Console.WriteLine(); 
@@ -56,7 +56,7 @@ namespace WarehouseOOPMentoring
                         Environment.Exit(0);
                         break;
                     default:
-                        Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                        Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                         break;
                 }
             }

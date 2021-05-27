@@ -64,7 +64,7 @@ namespace Warehouse_infrastructure
             }
             else
             {
-                Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                 return;
             }
         }
@@ -77,8 +77,8 @@ namespace Warehouse_infrastructure
             Console.WriteLine("\n\t Update Employee Menu");
             Console.WriteLine($"1 - View '{nameof(Employee)}' list");
             Console.WriteLine($"2 - Search employee by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
-            Console.WriteLine($"3 - {AlertsConstants.RETURN_TO_MAIN_MENU}");
-            Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
+            Console.WriteLine($"3 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
+            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
             int.TryParse(choise, out int number);
@@ -104,7 +104,7 @@ namespace Warehouse_infrastructure
                 case 3:
                     break;
                 default:
-                    Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                     UpdateEmployeeMenu(garage);
                     break;
             }
@@ -123,10 +123,10 @@ namespace Warehouse_infrastructure
             {
                 if (searchedEntities != null && searchedEntities.Length > 0)
                 {
-                    Guid id = searchedEntities[selectEmployee - 1].ID;
+                    Guid id = searchedEntities[selectEmployee - 1].id;
                     for (int i = 0; i < garage.Employee.Length; i++)
                     {
-                        if (garage.Employee[i].ID == id)
+                        if (garage.Employee[i].id == id)
                         {
                             employeeForUpdate = garage.Employee[i];
                             break;
@@ -156,7 +156,7 @@ namespace Warehouse_infrastructure
                 Console.WriteLine($"6 - Update 'Contact {nameof(Employee.Number)}'");
                 Console.WriteLine($"7 - Update '{nameof(Employee.Education)}'");
                 Console.WriteLine($"8 - return to '{nameof(Employee)} Menu'");
-                Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
+                Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
                 int.TryParse(Console.ReadLine(), out number);
                 Console.WriteLine();
                 switch (number)
@@ -193,7 +193,7 @@ namespace Warehouse_infrastructure
                         EmployeeMenu(garage);
                         break;
                     default:
-                        Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                        Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                         break;
                 }
             }
@@ -210,8 +210,8 @@ namespace Warehouse_infrastructure
             Console.WriteLine($"3 - Update '{nameof(Employee)} Information'");
             Console.WriteLine($"4 - Find {nameof(garage.Employee)} by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
             Console.WriteLine($"5 - Remove '{nameof(garage.Employee)}'");
-            Console.WriteLine($"6 - {AlertsConstants.RETURN_TO_MAIN_MENU}");
-            Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
+            Console.WriteLine($"6 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
+            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
             int.TryParse(choise, out int number);
@@ -241,7 +241,7 @@ namespace Warehouse_infrastructure
                 case 6:
                     break;
                 default:
-                    Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                     EmployeeMenu(garage);
                     break;
             }
@@ -271,7 +271,7 @@ namespace Warehouse_infrastructure
             }
             else
             {
-                Console.WriteLine(AlertsConstants.NO_OR_NULL_EMPLOYEE);
+                Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
             }
         }
         /// <summary>
@@ -316,7 +316,7 @@ namespace Warehouse_infrastructure
             }
             else
             {
-                Console.WriteLine(AlertsConstants.NO_OR_NULL_EMPLOYEE);
+                Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
                 return null;
             }
         }
@@ -352,7 +352,7 @@ namespace Warehouse_infrastructure
             }
             else
             {
-                Console.WriteLine(AlertsConstants.NO_OR_NULL_EMPLOYEE);
+                Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
             }
         }
     }

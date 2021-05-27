@@ -26,8 +26,8 @@ namespace Warehouse_infrastructure
             get { return age; }
             set { age = value; }
         }
-        public Person(Guid ID, string name, string surname, int age)
-            :base (ID)
+        public Person(Guid id, string name, string surname, int age)
+            :base (id)
         {
             this.Name = name;
             this.Surname = surname;

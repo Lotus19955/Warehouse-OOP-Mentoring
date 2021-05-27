@@ -42,8 +42,8 @@ namespace Warehouse_infrastructure
             Console.WriteLine($"2 - Update '{nameof(garage.Address)}'");
             Console.WriteLine($"3 - Update 'Contact {nameof(garage.Number)}'");
             Console.WriteLine($"4 - Update number of free '{nameof(garage.Vacancy)}'");
-            Console.WriteLine($"5 - {AlertsConstants.RETURN_TO_MAIN_MENU}");
-            Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
+            Console.WriteLine($"5 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
+            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             int.TryParse(choise, out int number);
             Console.WriteLine();
@@ -74,7 +74,7 @@ namespace Warehouse_infrastructure
                 case 5:
                     break;
                 default:
-                    Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                     UpdateMenu(garage);
                     break;
             }
@@ -91,8 +91,8 @@ namespace Warehouse_infrastructure
             Console.WriteLine($"3 - Display 'Contact {nameof(garage.Number)}'");
             Console.WriteLine($"4 - Display number of '{nameof(garage.Vacancy)}'");
             Console.WriteLine($"5 - Display all information");
-            Console.WriteLine($"6 - {AlertsConstants.RETURN_TO_MAIN_MENU}");
-            Console.Write(AlertsConstants.ENTER_YOUR_CHOICE);
+            Console.WriteLine($"6 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
+            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
             int.TryParse(choise, out int number);
@@ -122,7 +122,7 @@ namespace Warehouse_infrastructure
                 case 6:
                     break;
                 default:
-                    Console.WriteLine(AlertsConstants.UNKNOWN_COMMAND);
+                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                     DisplayMenu(garage);
                     break;
             }
