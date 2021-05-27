@@ -45,7 +45,7 @@ namespace Warehouse_infrastructure
             this.Number = number;
             this.Vacancy = vacancy;
         }
-        public void UptadeVacancy(int number)
+        public void UpdateVacancy(int number)
         {
             this.Vacancy = number;
         }

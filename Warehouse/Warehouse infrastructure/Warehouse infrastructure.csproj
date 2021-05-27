@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConstants.cs" />
     <Compile Include="EmployeeService.cs" />
+    <Compile Include="HasId.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="ValidationService.cs" />
     <Compile Include="WarehouseService.cs" />
