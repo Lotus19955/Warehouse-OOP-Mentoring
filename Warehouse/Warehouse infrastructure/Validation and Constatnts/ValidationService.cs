@@ -20,10 +20,10 @@ namespace Warehouse_infrastructure
             {
                 return param;
             }
-                Console.WriteLine($"{paramName} can not be empty");
-                Console.Write($"Enter '{paramName}': ");
-                param = Console.ReadLine();
-                return TrySetValue(param, paramName);
+            Console.WriteLine($"{paramName} can not be empty");
+            Console.Write($"Enter '{paramName}': ");
+            param = Console.ReadLine();
+            return TrySetValue(param, paramName);
         }
         /// <summary>
         /// Check objects parameters for 0 or empty

@@ -32,8 +32,8 @@ namespace Warehouse_infrastructure
             get { return education; }
             set { education = value; }
         }
-        public Employee(Guid id, string name, string surname, int age, string job, string address, string number, string education)
-            : base(id, name, surname, age)
+        public Employee(string name, string surname, int age, string job, string address, string number, string education)
+            :base (name, surname, age)
         {
             this.Job = job;
             this.Address = address;

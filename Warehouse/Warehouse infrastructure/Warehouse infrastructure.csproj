@@ -41,14 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppConstants.cs" />
-    <Compile Include="EmployeeService.cs" />
+    <Compile Include="Validation and Constatnts\AppConstants.cs" />
+    <Compile Include="BaseService.cs" />
+    <Compile Include="Employee\EmployeeService.cs" />
     <Compile Include="HasId.cs" />
-    <Compile Include="Person.cs" />
-    <Compile Include="ValidationService.cs" />
-    <Compile Include="WarehouseService.cs" />
-    <Compile Include="Employee.cs" />
-    <Compile Include="Warehouse.cs" />
+    <Compile Include="Employee\Person.cs" />
+    <Compile Include="Validation and Constatnts\ValidationService.cs" />
+    <Compile Include="Warehouse\WarehouseService.cs" />
+    <Compile Include="Employee\Employee.cs" />
+    <Compile Include="Warehouse\Warehouse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

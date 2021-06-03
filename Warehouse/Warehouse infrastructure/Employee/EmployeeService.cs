@@ -51,7 +51,7 @@ namespace Warehouse_infrastructure
                         Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
                         string education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
                         
-                        garage.Employee[garage.Employee.Length - 1] = new Employee(Guid.NewGuid(), name, surname, age, job, address, number, education);
+                        garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
                         garage.UpdateVacancy(garage.Vacancy - 1);
                         Console.WriteLine("Employee created!");
                         Console.WriteLine();
@@ -69,53 +69,11 @@ namespace Warehouse_infrastructure
             }
         }
         /// <summary>
-        /// Display to console 'Update employee  menu'
-        /// </summary>
-        /// <param name="garage">object</param>
-        public void UpdateEmployeeMenu(Warehouse garage)
-        {
-            Console.WriteLine("\n\t Update Employee Menu");
-            Console.WriteLine($"1 - View '{nameof(Employee)}' list");
-            Console.WriteLine($"2 - Search employee by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
-            Console.WriteLine($"3 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
-            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
-            string choise = Console.ReadLine();
-            Console.WriteLine();
-            int.TryParse(choise, out int number);
-            Console.Clear();
-            switch (number)
-            {
-                case 1:
-                    DisplayWarehouseEmployee(garage);
-                    if (garage.Employee != null)
-                    {
-                        UpdateEmployeeInformation(garage);
-                    }
-                    UpdateEmployeeMenu(garage);
-                    break;
-                case 2:
-                    Employee[] searchedEntities = SearchEmployeesByNameAndSurname(garage);
-                    if (searchedEntities != null)
-                    {
-                        UpdateEmployeeInformation(garage, searchedEntities);
-                    }
-                    UpdateEmployeeMenu(garage);
-                    break;
-                case 3:
-                    break;
-                default:
-                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
-                    UpdateEmployeeMenu(garage);
-                    break;
-            }
-        }
-        /// <summary>
         /// Update information about employee
         /// </summary>
         /// <param name="garage">object</param>
-        public void UpdateEmployeeInformation(Warehouse garage, Employee[] searchedEntities = null)
+        public Employee UpdateEmployeeInformation(Warehouse garage, Employee[] searchedEntities = null)
         {
-            int number = 0;
             Console.Write("Enter number of employee: ");
             int selectEmployee = validationService.TrySetNumber(Console.ReadLine(), "Number");
             Employee employeeForUpdate = null;
@@ -144,114 +102,39 @@ namespace Warehouse_infrastructure
                 Console.WriteLine("'Number' is incorrect value");
                 UpdateEmployeeInformation(garage, searchedEntities);
             }
-            while (true)
-            {
-                Console.Clear();
-                Console.WriteLine("\n\t Update Employee Information");
-                Console.WriteLine($"1 - Update '{nameof(Employee.Name)}'");
-                Console.WriteLine($"2 - Update '{nameof(Employee.Surname)}'");
-                Console.WriteLine($"3 - Update '{nameof(Employee.Age)}'");
-                Console.WriteLine($"4 - Update '{nameof(Employee.Job)}'");
-                Console.WriteLine($"5 - Update '{nameof(Employee.Address)}'");
-                Console.WriteLine($"6 - Update 'Contact {nameof(Employee.Number)}'");
-                Console.WriteLine($"7 - Update '{nameof(Employee.Education)}'");
-                Console.WriteLine($"8 - return to '{nameof(Employee)} Menu'");
-                Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
-                int.TryParse(Console.ReadLine(), out number);
-                Console.WriteLine();
-                switch (number)
-                {
-                    case 1:
-                        Console.Write($"Enter new '{nameof(Employee.Name)}': ");
-                        employeeForUpdate.Name = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
-                        break;
-                    case 2:
-                        Console.Write($"Enter new '{nameof(Employee.Surname)}': ");
-                        employeeForUpdate.Surname = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
-                        break;
-                    case 3:
-                        Console.Write($"Enter new '{nameof(Employee.Age)}': ");
-                        employeeForUpdate.Age = validationService.TrySetNumber(Console.ReadLine(), nameof(Employee.Age));
-                        break;
-                    case 4:
-                        Console.Write($"Enter new '{nameof(Employee.Job)}': ");
-                        employeeForUpdate.Job = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Job));
-                        break;
-                    case 5:
-                        Console.Write($"Enter new '{nameof(Employee.Address)}': ");
-                        employeeForUpdate.Address = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Address));
-                        break;
-                    case 6:
-                        Console.Write($"Enter new 'Contact {nameof(Employee.Number)}': ");
-                        employeeForUpdate.Number = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Number));
-                        break;
-                    case 7:
-                        Console.Write($"Enter new '{nameof(Employee.Education)}': ");
-                        employeeForUpdate.Education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
-                        break;
-                    case 8:
-                        EmployeeMenu(garage);
-                        break;
-                    default:
-                        Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
-                        break;
-                }
-            }
+            return employeeForUpdate;
         }
         /// <summary>
-        /// Display to console 'Employee menu'
+        /// Sort array of Employee by 'Name'
         /// </summary>
         /// <param name="garage">object</param>
-        public void EmployeeMenu(Warehouse garage)
+        private void SortEmployeeByName (Warehouse garage)
         {
-            Console.WriteLine("\n\t Employee Menu");
-            Console.WriteLine($"1 - Display '{nameof(Employee)}'");
-            Console.WriteLine($"2 - Create new '{nameof(Employee)}'");
-            Console.WriteLine($"3 - Update '{nameof(Employee)} Information'");
-            Console.WriteLine($"4 - Find {nameof(garage.Employee)} by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
-            Console.WriteLine($"5 - Remove '{nameof(garage.Employee)}'");
-            Console.WriteLine($"6 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
-            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
-            string choise = Console.ReadLine();
-            Console.WriteLine();
-            int.TryParse(choise, out int number);
-            Console.Clear();
-            switch (number)
+            int cmpVal;
+            for (int i = 0; i < garage.Employee.Length; i++)
             {
-                case 1:
-                    DisplayWarehouseEmployee(garage);
-                    EmployeeMenu(garage);
-                    break;
-                case 2:
-                    CreateEmployee(garage);
-                    EmployeeMenu(garage);
-                    break;
-                case 3:
-                    UpdateEmployeeMenu(garage);
-                    EmployeeMenu(garage);
-                    break;
-                case 4:
-                    SearchEmployeesByNameAndSurname(garage);
-                    EmployeeMenu(garage);
-                    break;
-                case 5:
-                    RemoveEmployee(garage);
-                    EmployeeMenu(garage);
-                    break;
-                case 6:
-                    break;
-                default:
-                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
-                    EmployeeMenu(garage);
-                    break;
+                for (int y = i + 1; y < garage.Employee.Length; y++)
+                {
+                    if (y <= garage.Employee.Length - 1)
+                    {
+                        cmpVal = garage.Employee[i].Name.CompareTo(garage.Employee[y].Name);
+                    if (cmpVal > 0)
+                    {
+                        Employee x = garage.Employee[i];
+                        garage.Employee[i] = garage.Employee[y];
+                        garage.Employee[y] = x;
+                    }
+                    }
+                }
             }
-        }
+                    }
         /// <summary>
         /// Display to console information about employees
         /// </summary>
         /// <param name="employees">object</param>
         public void DisplayWarehouseEmployee(Warehouse garage)
         {
+            SortEmployeeByName(garage);
             int number = 1;
             if (validationService.ValidationEmployee(garage))
             {
