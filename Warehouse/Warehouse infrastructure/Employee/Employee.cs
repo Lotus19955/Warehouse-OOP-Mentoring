@@ -22,7 +22,7 @@ namespace Warehouse_infrastructure
             get { return address; }
             set { address = value; }
         }
-        public string Number
+        public string Contact_Number
         {
             get { return number; }
             set { number = value; }
@@ -37,8 +37,15 @@ namespace Warehouse_infrastructure
         {
             this.Job = job;
             this.Address = address;
-            this.Number = number;
+            this.Contact_Number = number;
             this.Education = education;
+        }
+        public override string ToString()
+        {
+            return $"{nameof(Name)}: {Name} {nameof(Surname)}: {base.Surname} " +
+                   $"{nameof(Age)}: {base.Age} {nameof(Job)}: {job} " +
+                   $"{nameof(Address)}: {address} {nameof(Contact_Number)}: {number} " +
+                   $"{nameof(Education)}: {education} ";
         }
     }
 }

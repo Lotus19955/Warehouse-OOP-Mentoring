@@ -50,7 +50,7 @@ namespace WarehouseOOPMentoring
                         EmployeeMenu(garage);
                         break;
                     case 4:
-                        warehouseService.ClearInfoAboutWarehouse(ref garage);
+                        ClearInfoAboutWarehouse(ref garage);
                         garage = warehouseService.CreateWarehouse(ref garage);
                         break;
                     case 5:
@@ -71,8 +71,8 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("\n\t Update Menu");
             Console.WriteLine($"1 - Update '{nameof(garage.Title)}'");
             Console.WriteLine($"2 - Update '{nameof(garage.Address)}'");
-            Console.WriteLine($"3 - Update 'Contact {nameof(garage.Number)}'");
-            Console.WriteLine($"4 - Update number of free '{nameof(garage.Vacancy)}'");
+            Console.WriteLine($"3 - Update '{nameof(garage.Contact_Number)}'");
+            Console.WriteLine($"4 - Update '{nameof(garage.Number_of_vacancy)}'");
             Console.WriteLine($"5 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
             Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
@@ -93,12 +93,12 @@ namespace WarehouseOOPMentoring
                     break;
                 case 3:
                     Console.Write("Enter new 'Contact number': ");
-                    garage.Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Number));
+                    garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
                     UpdateMenu(garage);
                     break;
                 case 4:
                     Console.Write("Enter new number of free 'Vacancy': ");
-                    int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Vacancy));
+                    int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
                     UpdateMenu(garage);
                     garage.UpdateVacancy(vacancy);
                     break;
@@ -119,8 +119,8 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("\n\t Display Menu");
             Console.WriteLine($"1 - Display '{nameof(garage.Title)}'");
             Console.WriteLine($"2 - Display '{nameof(garage.Address)}'");
-            Console.WriteLine($"3 - Display 'Contact {nameof(garage.Number)}'");
-            Console.WriteLine($"4 - Display number of '{nameof(garage.Vacancy)}'");
+            Console.WriteLine($"3 - Display 'Contact {nameof(garage.Contact_Number)}'");
+            Console.WriteLine($"4 - Display '{nameof(garage.Number_of_vacancy)}'");
             Console.WriteLine($"5 - Display all information");
             Console.WriteLine($"6 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
             Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
@@ -139,11 +139,11 @@ namespace WarehouseOOPMentoring
                     DisplayMenu(garage);
                     break;
                 case 3:
-                    warehouseService.Display(garage.Number, nameof(garage.Number));
+                    warehouseService.Display(garage.Contact_Number, nameof(garage.Contact_Number));
                     DisplayMenu(garage);
                     break;
                 case 4:
-                    warehouseService.DisplayFreeVacancy(garage);
+                    DisplayFreeVacancy(garage);
                     DisplayMenu(garage);
                     break;
                 case 5:
@@ -167,7 +167,7 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("\n\t Update Employee Menu");
             Console.WriteLine($"1 - View '{nameof(Employee)}' list");
             Console.WriteLine($"2 - Search employee by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
-            Console.WriteLine($"3 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
+            Console.WriteLine($"3 - Return to 'Empolyee menu'");
             Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
@@ -208,7 +208,7 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("\n\t Employee Menu");
             Console.WriteLine($"1 - Display '{nameof(Employee)}'");
             Console.WriteLine($"2 - Create new '{nameof(Employee)}'");
-            Console.WriteLine($"3 - Update '{nameof(Employee)} Information'");
+            Console.WriteLine($"3 - Update '{nameof(Employee)} information'");
             Console.WriteLine($"4 - Find {nameof(garage.Employee)} by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
             Console.WriteLine($"5 - Remove '{nameof(garage.Employee)}'");
             Console.WriteLine($"6 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
@@ -264,7 +264,7 @@ namespace WarehouseOOPMentoring
                 Console.WriteLine($"3 - Update '{nameof(Employee.Age)}'");
                 Console.WriteLine($"4 - Update '{nameof(Employee.Job)}'");
                 Console.WriteLine($"5 - Update '{nameof(Employee.Address)}'");
-                Console.WriteLine($"6 - Update 'Contact {nameof(Employee.Number)}'");
+                Console.WriteLine($"6 - Update '{nameof(Employee.Contact_Number)}'");
                 Console.WriteLine($"7 - Update '{nameof(Employee.Education)}'");
                 Console.WriteLine($"8 - return to '{nameof(Employee)} Menu'");
                 Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
@@ -293,21 +293,39 @@ namespace WarehouseOOPMentoring
                         employeeForUpdate.Address = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Address));
                         break;
                     case 6:
-                        Console.Write($"Enter new 'Contact {nameof(Employee.Number)}': ");
-                        employeeForUpdate.Number = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Number));
+                        Console.Write($"Enter new '{nameof(Employee.Contact_Number)}': ");
+                        employeeForUpdate.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Contact_Number));
                         break;
                     case 7:
                         Console.Write($"Enter new '{nameof(Employee.Education)}': ");
                         employeeForUpdate.Education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
                         break;
                     case 8:
-                        EmployeeMenu(garage); 
+                        EmployeeMenu(garage);
                         break;
                     default:
                         Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                         break;
                 }
             }
+        }
+        /// <summary>
+        /// Clear all information sbout warehouse and employees
+        /// </summary>
+        /// <param name="garage">object</param>
+        /// <param name="employees">object</param>
+        public static void ClearInfoAboutWarehouse(ref Warehouse garage)
+        {
+            garage = null;
+            Console.WriteLine("Clear info success");
+        }
+        /// <summary>
+        /// Display to console informations about free vacancy 
+        /// </summary>
+        /// <param name="garage">object</param>
+        public static void DisplayFreeVacancy(Warehouse garage)
+        {
+            Console.WriteLine($"Number of free vacancy: {garage.Number_of_vacancy}");
         }
     }
 }

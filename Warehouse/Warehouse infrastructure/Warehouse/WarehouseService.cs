@@ -17,17 +17,17 @@ namespace Warehouse_infrastructure
         public Warehouse CreateWarehouse(ref Warehouse garage)
         {
             Console.WriteLine("First you need to add information about warehouse");
-            Console.Write($"Enter '{nameof(Warehouse.Title)}' of warehouse: ");
+            Console.Write($"Enter '{nameof(Warehouse.Title)}': ");
             string title = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Title));
 
-            Console.Write($"Enter '{nameof(Warehouse.Address)}' of warehouse: ");
+            Console.Write($"Enter '{nameof(Warehouse.Address)}': ");
             string address = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Address));
 
-            Console.Write($"Enter  'Contact {nameof(Warehouse.Number)}' of warehouse: ");
-            string number = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Number));
+            Console.Write($"Enter  'Contact {nameof(Warehouse.Contact_Number)}': ");
+            string number = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Contact_Number));
 
-            Console.Write($"Enter  numbers of free '{nameof(Warehouse.Vacancy)}' of warehouse: ");
-            int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Vacancy)); 
+            Console.Write($"Enter  '{nameof(Warehouse.Number_of_vacancy)}': ");
+            int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Number_of_vacancy));
             garage = new Warehouse(title, address, number, vacancy);
             return garage;
         }
@@ -36,7 +36,7 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="param">gets object parameters</param>
         /// <param name="paramName">gets 'Names' of object parameters</param>
-        public  void Display(string param, string paramName)
+        public void Display(string param, string paramName)
         {
             Console.WriteLine($"Warehouse {paramName}: {param} ");
         }
@@ -46,31 +46,7 @@ namespace Warehouse_infrastructure
         /// <param name="param">gets object parameters</param>
         public void Display(Warehouse garage)
         {
-            Console.Write($" Warehouse Title: {garage.Title}\t " +
-                       $" Warehouse address: {garage.Address}\t " +
-                       $" Warehouse number: {garage.Number}\t " +
-                       $" Number of free vacancy:{garage.Vacancy}");
-            Console.WriteLine("Information about empolees:");
-            DisplayWarehouseEmployee(garage);
-            Console.WriteLine();
-        }
-        /// <summary>
-        /// Display to console informations about free vacancy 
-        /// </summary>
-        /// <param name="garage">object</param>
-        public void DisplayFreeVacancy(Warehouse garage)
-        {
-            Console.WriteLine($"Number of free vacancy: {garage.Vacancy}");
-        }
-        /// <summary>
-        /// Clear all information sbout warehouse and employees
-        /// </summary>
-        /// <param name="garage">object</param>
-        /// <param name="employees">object</param>
-        public void ClearInfoAboutWarehouse(ref Warehouse garage)
-        {
-            garage = null;
-            Console.WriteLine("Clear info success");
+            Console.WriteLine(garage.ToString());
         }
     }
 }

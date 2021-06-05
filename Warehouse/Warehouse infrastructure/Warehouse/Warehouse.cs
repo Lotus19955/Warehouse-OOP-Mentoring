@@ -23,12 +23,12 @@ namespace Warehouse_infrastructure
             get { return address; }
             set { address = value; }
         }
-        public string Number 
+        public string Contact_Number 
         {
             get { return number; }
             set { number = value; }
         }
-        public int Vacancy
+        public int Number_of_vacancy
         {
             get { return vacancy; }
             private set { vacancy = value; }
@@ -42,12 +42,17 @@ namespace Warehouse_infrastructure
         {
             this.Title = title;
             this.Address = address;
-            this.Number = number;
-            this.Vacancy = vacancy;
+            this.Contact_Number = number;
+            this.Number_of_vacancy = vacancy;
         }
         public void UpdateVacancy(int number)
         {
-            this.Vacancy = number;
+            this.Number_of_vacancy = number;
+        }
+        public override string ToString()
+        {
+            return $"{nameof(Title)}: {title} {nameof(Address)}: {address} " +
+                   $"{nameof(Contact_Number)}: {number} {nameof(Number_of_vacancy)}: {vacancy}";
         }
     }
 }
