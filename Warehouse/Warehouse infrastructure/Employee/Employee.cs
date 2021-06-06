@@ -22,7 +22,7 @@ namespace Warehouse_infrastructure
             get { return address; }
             set { address = value; }
         }
-        public string Number
+        public string Contact_Number
         {
             get { return number; }
             set { number = value; }
@@ -32,13 +32,20 @@ namespace Warehouse_infrastructure
             get { return education; }
             set { education = value; }
         }
-        public Employee(Guid id, string name, string surname, int age, string job, string address, string number, string education)
-            : base(id, name, surname, age)
+        public Employee(string name, string surname, int age, string job, string address, string number, string education)
+            :base (name, surname, age)
         {
             this.Job = job;
             this.Address = address;
-            this.Number = number;
+            this.Contact_Number = number;
             this.Education = education;
+        }
+        public override string ToString()
+        {
+            return $"{nameof(Name)}: {Name} {nameof(Surname)}: {base.Surname} " +
+                   $"{nameof(Age)}: {base.Age} {nameof(Job)}: {job} " +
+                   $"{nameof(Address)}: {address} {nameof(Contact_Number)}: {number} " +
+                   $"{nameof(Education)}: {education} ";
         }
     }
 }

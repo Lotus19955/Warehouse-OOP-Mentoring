@@ -8,15 +8,10 @@ namespace Warehouse_infrastructure
 {
     public class HasId
     {
-        private Guid ID;
-        public Guid id
+        public Guid id {get; set;}
+        public HasId() 
         {
-            get { return ID; }
-            private set { ID = value; }
-        }
-        public HasId(Guid id)
-        {
-            this.ID = id;
+            this.id = Guid.NewGuid();
         }
     }
 }

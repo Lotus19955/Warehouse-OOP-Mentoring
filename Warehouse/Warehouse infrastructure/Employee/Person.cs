@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class Person : HasId
+    public abstract class Person : HasId
     {
         private string name;
         private string surname;
@@ -26,8 +26,7 @@ namespace Warehouse_infrastructure
             get { return age; }
             set { age = value; }
         }
-        public Person(Guid id, string name, string surname, int age)
-            :base (id)
+        public Person(string name, string surname, int age) : base() 
         {
             this.Name = name;
             this.Surname = surname;
