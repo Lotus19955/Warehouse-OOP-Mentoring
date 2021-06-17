@@ -107,7 +107,7 @@ namespace Warehouse_infrastructure
         /// <summary>
         /// Sort array of Employee by 'Age'
         /// </summary>
-        private void SortEmployeeByAge<T> (T[] array) where T : class //Can we limit by class "Person"?
+        private void SortEmployeeByAge<T>(T[] array) where T : class
         {
             for (int i = 0; i < array.Length; i++)
             {
