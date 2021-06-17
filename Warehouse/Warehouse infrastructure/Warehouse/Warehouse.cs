@@ -54,5 +54,26 @@ namespace Warehouse_infrastructure
             return $"{nameof(Title)}: {title} {nameof(Address)}: {address} " +
                    $"{nameof(Contact_Number)}: {number} {nameof(Number_of_vacancy)}: {vacancy}";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is Warehouse))
+            {
+                return false;
+            }
+            return this.Contact_Number == ((Warehouse)obj).Contact_Number;
+        }
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + Contact_Number.GetHashCode();
+                return hash;
+            }
+        }
     }
 }

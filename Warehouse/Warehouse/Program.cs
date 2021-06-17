@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Warehouse_infrastructure;
+using System.Diagnostics;
 
 namespace WarehouseOOPMentoring
 {
@@ -13,6 +14,8 @@ namespace WarehouseOOPMentoring
         private static WarehouseService warehouseService = new WarehouseService();
         private static EmployeeService employeeService = new EmployeeService();
         private static ValidationService validationService = new ValidationService();
+        private static Stopwatch clock = new Stopwatch();
+        
         private static void Main(string[] args)
         {
             warehouseService.CreateWarehouse(ref garage);
@@ -25,6 +28,7 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void Menu(Warehouse garage)
         {
+            clock.Start();
             while (true)
             {
                 Console.WriteLine("\n\t Main Menu");
@@ -54,6 +58,12 @@ namespace WarehouseOOPMentoring
                         garage = warehouseService.CreateWarehouse(ref garage);
                         break;
                     case 5:
+                        clock.Stop();
+                        TimeSpan cl = clock.Elapsed;
+                        string elapsedTime = string.Format("{0:00} : {1:00}", cl.Minutes, cl.Seconds);
+                        Console.WriteLine("RunTime " + elapsedTime);
+                        Console.WriteLine("Press 'Enter'");
+                        Console.Read();
                         Environment.Exit(0);
                         break;
                     default:

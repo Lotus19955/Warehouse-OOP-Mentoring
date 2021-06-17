@@ -47,5 +47,26 @@ namespace Warehouse_infrastructure
                    $"{nameof(Address)}: {address} {nameof(Contact_Number)}: {number} " +
                    $"{nameof(Education)}: {education} ";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is Employee))
+            {
+                return false;
+            }
+            return this.Age > ((Employee)obj).Age;
+        }
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + Age.GetHashCode();
+                return hash;
+            }
+        }
     }
 }
