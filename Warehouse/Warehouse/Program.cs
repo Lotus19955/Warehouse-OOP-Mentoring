@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Warehouse_infrastructure;
+using System.Diagnostics;
 
 namespace WarehouseOOPMentoring
 {
@@ -13,6 +14,8 @@ namespace WarehouseOOPMentoring
         private static WarehouseService warehouseService = new WarehouseService();
         private static EmployeeService employeeService = new EmployeeService();
         private static ValidationService validationService = new ValidationService();
+        private static Stopwatch clock = new Stopwatch();
+        
         private static void Main(string[] args)
         {
             warehouseService.CreateWarehouse(ref garage);
@@ -25,6 +28,7 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void Menu(Warehouse garage)
         {
+            clock.Start();
             while (true)
             {
                 Console.WriteLine("\n\t Main Menu");
@@ -32,7 +36,8 @@ namespace WarehouseOOPMentoring
                 Console.WriteLine("2 - Display menu");
                 Console.WriteLine("3 - Employee menu");
                 Console.WriteLine("4 - Clear information about warehouse");
-                Console.WriteLine("5 - Exit");
+                Console.WriteLine("5 - Time Menu");
+                Console.WriteLine("6 - Exit");
                 Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
                 string choise = Console.ReadLine();
                 int.TryParse(choise, out int number);
@@ -54,6 +59,13 @@ namespace WarehouseOOPMentoring
                         garage = warehouseService.CreateWarehouse(ref garage);
                         break;
                     case 5:
+                        TimeMenu();
+                        break;
+                    case 6:
+                        clock.Stop();
+                        DisplayRunTime();
+                        Console.WriteLine("Press 'Enter'");
+                        Console.Read();
                         Environment.Exit(0);
                         break;
                     default:
@@ -167,7 +179,7 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("\n\t Update Employee Menu");
             Console.WriteLine($"1 - View '{nameof(Employee)}' list");
             Console.WriteLine($"2 - Search employee by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
-            Console.WriteLine($"3 - Return to 'Empolyee menu'");
+            Console.WriteLine($"3 - Return to '{nameof(Employee)} Menu'");
             Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
@@ -253,7 +265,6 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void UpdateEmployeeInformationMenu(Warehouse garage, Employee[] searchedEntities = null)
         {
-            int number = 0;
             Employee employeeForUpdate = employeeService.UpdateEmployeeInformation(garage, searchedEntities);
             while (true)
             {
@@ -268,7 +279,7 @@ namespace WarehouseOOPMentoring
                 Console.WriteLine($"7 - Update '{nameof(Employee.Education)}'");
                 Console.WriteLine($"8 - return to '{nameof(Employee)} Menu'");
                 Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
-                int.TryParse(Console.ReadLine(), out number);
+                int.TryParse(Console.ReadLine(), out int number);
                 Console.WriteLine();
                 switch (number)
                 {
@@ -326,6 +337,56 @@ namespace WarehouseOOPMentoring
         public static void DisplayFreeVacancy(Warehouse garage)
         {
             Console.WriteLine($"Number of free vacancy: {garage.Number_of_vacancy}");
+        }
+        /// <summary>
+        /// Display to console runtime information
+        /// </summary>
+        public static void DisplayRunTime()
+        {
+            TimeSpan cl = clock.Elapsed;
+            string elapsedTime = string.Format("{0:00} : {1:00}", cl.Minutes, cl.Seconds);
+            Console.WriteLine("RunTime " + elapsedTime);
+        }
+        /// <summary>
+        /// Display to console 'Time Menu'
+        /// </summary>
+        public static void TimeMenu()
+        {
+            Console.Clear();
+            DisplayRunTime();
+            Console.WriteLine("\n\t Time Menu");
+            Console.WriteLine($"1 - Time stop");
+            Console.WriteLine($"2 - Continue time");
+            Console.WriteLine($"3 - Restart time ");
+            Console.WriteLine($"4 - Display current execution time");
+            Console.WriteLine($"5 - Return to 'Main Menu'");
+            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
+            int.TryParse(Console.ReadLine(), out int number);
+            Console.WriteLine();
+            switch (number)
+            {
+                case 1:
+                    clock.Stop();
+                    TimeMenu();
+                    break;
+                case 2:
+                    clock.Start();
+                    TimeMenu();
+                    break;
+                case 3:
+                    clock.Restart();
+                    TimeMenu();
+                    break;
+                case 4:
+                    DisplayRunTime();
+                    TimeMenu();
+                    break;
+                case 5:
+                    break;
+                default:
+                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
+                    break;
+            }
         }
     }
 }

@@ -105,22 +105,21 @@ namespace Warehouse_infrastructure
             return employeeForUpdate;
         }
         /// <summary>
-        /// Sort array of Employee by 'Name'
+        /// Sort array of Employee by 'Age'
         /// </summary>
-        /// <param name="garage">object</param>
-        private void SortEmployeeByName (Warehouse garage)
+        private void SortEmployeeByAge<T>(T[] array) where T : class
         {
-            for (int i = 0; i < garage.Employee.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                for (int y = i + 1; y < garage.Employee.Length; y++)
+                for (int y = i + 1; y < array.Length; y++)
                 {
-                    if (y <= garage.Employee.Length - 1)
+                    if (y <= array.Length - 1)
                     {
-                        if (garage.Employee[i].Name.CompareTo(garage.Employee[y].Name) > 0)
+                        if (array[i].Equals(array[y]))
                         {
-                            Employee x = garage.Employee[i];
-                            garage.Employee[i] = garage.Employee[y];
-                            garage.Employee[y] = x;
+                            T x = array[i];
+                            array[i] = array[y];
+                            array[y] = x;
                         }
                     }
                 }
@@ -134,7 +133,7 @@ namespace Warehouse_infrastructure
         {
             if (validationService.ValidationEmployee(garage))
             {
-                SortEmployeeByName(garage);
+                SortEmployeeByAge<Employee>(garage.Employee);
                 int number = 1;
                 foreach (Employee employee in garage.Employee)
                 {
