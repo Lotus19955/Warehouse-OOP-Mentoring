@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
-{
-    public class WarehouseService : EmployeeService
+{ 
+    public class WarehouseService : EmployeeService, IService
     {
         private static ValidationService validationService = new ValidationService();
         /// <summary>
@@ -14,7 +14,7 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <returns>object</returns>
         /// <returns>object</returns>
-        public Warehouse CreateWarehouse(ref Warehouse garage)
+        public Warehouse Create(ref Warehouse garage)
         {
             Console.WriteLine("First you need to add information about warehouse");
             Console.Write($"Enter '{nameof(Warehouse.Title)}': ");

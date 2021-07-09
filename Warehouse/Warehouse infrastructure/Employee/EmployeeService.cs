@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class EmployeeService
+    public class EmployeeService : IService
     {
         private static ValidationService validationService = new ValidationService();
         /// <summary>
         /// Create you employee object
         /// </summary>
         /// <returns>object</returns>
-        public void CreateEmployee(Warehouse garage)
+        public void Create(Warehouse garage)
         {
             Console.WriteLine($"Number of free vacancy: {garage.Number_of_vacancy}");
             Console.Write("How many employees do you want to add: ");
@@ -27,7 +27,7 @@ namespace Warehouse_infrastructure
                         garage.Employee = new Employee[0];
                     }
                     for (int i = 0; i < employeeNumber; i++)
-                    { 
+                    {
                         validationService.Resize(garage, 1);
 
                         Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
@@ -50,7 +50,7 @@ namespace Warehouse_infrastructure
 
                         Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
                         string education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
-                        
+
                         garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
                         garage.UpdateVacancy(garage.Number_of_vacancy - 1);
                         Console.WriteLine("Employee created!");
@@ -105,27 +105,6 @@ namespace Warehouse_infrastructure
             return employeeForUpdate;
         }
         /// <summary>
-        /// Sort array of Employee by 'Age'
-        /// </summary>
-        private void SortEmployeeByAge<T>(T[] array) where T : class
-        {
-            for (int i = 0; i < array.Length; i++)
-            {
-                for (int y = i + 1; y < array.Length; y++)
-                {
-                    if (y <= array.Length - 1)
-                    {
-                        if (array[i].Equals(array[y]))
-                        {
-                            T x = array[i];
-                            array[i] = array[y];
-                            array[y] = x;
-                        }
-                    }
-                }
-            }
-        }
-        /// <summary>
         /// Display to console information about employees
         /// </summary>
         /// <param name="employees">object</param>
@@ -133,7 +112,7 @@ namespace Warehouse_infrastructure
         {
             if (validationService.ValidationEmployee(garage))
             {
-                SortEmployeeByAge<Employee>(garage.Employee);
+                Array.Sort(garage.Employee);
                 int number = 1;
                 foreach (Employee employee in garage.Employee)
                 {

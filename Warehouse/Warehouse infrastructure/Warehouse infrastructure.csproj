@@ -41,9 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Validation and Constatnts\AppConstants.cs" />
     <Compile Include="Employee\EmployeeService.cs" />
-    <Compile Include="HasId.cs" />
+    <Compile Include="Interfaces\IHasId.cs" />
     <Compile Include="Employee\Person.cs" />
     <Compile Include="Validation and Constatnts\ValidationService.cs" />
     <Compile Include="Warehouse\WarehouseService.cs" />

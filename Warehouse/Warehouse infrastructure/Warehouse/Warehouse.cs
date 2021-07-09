@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class Warehouse
+    public class Warehouse 
     {
         private string title;
         private string address;

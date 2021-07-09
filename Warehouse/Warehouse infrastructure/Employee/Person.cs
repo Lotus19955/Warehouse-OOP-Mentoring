@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public abstract class Person : HasId
-    {
+    public abstract class Person : IHasId
+    { 
         private string name;
         private string surname;
         private int age;
+        private Guid Id;
+        public Guid id
+        {
+            get { return Id; }
+            set { Id = Guid.NewGuid(); }
+        }
         public string Name
         {
             get { return name; }
@@ -31,6 +37,7 @@ namespace Warehouse_infrastructure
             this.Name = name;
             this.Surname = surname;
             this.Age = age;
+            this.id = Guid.NewGuid();
         }
     }
 }

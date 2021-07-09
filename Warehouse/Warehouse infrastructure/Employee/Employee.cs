@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class Employee : Person
-    {
+    public class Employee : Person, ICloneable, IComparable, IComparer<Employee>
+    { 
         private string job;
         private string address;
         private string number;
@@ -67,6 +67,34 @@ namespace Warehouse_infrastructure
                 hash = hash * 23 + Age.GetHashCode();
                 return hash;
             }
+        }
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+        public int CompareTo(object o)
+        {
+            Employee p = o as Employee;
+            if (p != null)
+            {
+                if (this.Age < p.Age)
+                    return -1;
+                else if (this.Age > p.Age)
+                    return 1;
+                else return 0;
+            }
+            else
+            {
+                throw new Exception("Параметр должен быть типа 'Person'");
+            }
+        }
+        public int Compare(Employee x, Employee y)
+        {
+            if (x.Age < y.Age)
+                return -1;
+            else if (x.Age > y.Age)
+                return 1;
+            else return 0;
         }
     }
 }
