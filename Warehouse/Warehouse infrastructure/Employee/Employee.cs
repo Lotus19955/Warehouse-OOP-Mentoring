@@ -32,6 +32,7 @@ namespace Warehouse_infrastructure
             get { return education; }
             set { education = value; }
         }
+        public Employee() { }
         public Employee(string name, string surname, int age, string job, string address, string number, string education)
             :base (name, surname, age)
         {
@@ -70,7 +71,16 @@ namespace Warehouse_infrastructure
         }
         public object Clone()
         {
-            return this.MemberwiseClone();
+            return new Employee
+            {
+                Name = this.Name,
+                Surname = this.Surname,
+                Age = this.Age,
+                Job = this.Job,
+                Address = this.Address ,
+                Contact_Number = this.Contact_Number,
+                Education = this.Education
+            };
         }
         public int CompareTo(object o)
         {

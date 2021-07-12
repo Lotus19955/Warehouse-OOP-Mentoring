@@ -32,6 +32,7 @@ namespace Warehouse_infrastructure
             get { return age; }
             set { age = value; }
         }
+        public Person() { }
         public Person(string name, string surname, int age) : base() 
         {
             this.Name = name;

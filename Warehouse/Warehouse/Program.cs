@@ -252,12 +252,12 @@ namespace WarehouseOOPMentoring
                     EmployeeMenu(garage);
                     break;
                 case 6:
-                    //Have trouble with converting Employee to Employee[]
-                    //employeeService.DisplayWarehouseEmployee(garage);
-                    //Employee cloneEmployee = employeeService.UpdateEmployeeInformation(garage);
-                    //Employee cloneEmployeeForUpdate = (Employee)cloneEmployee.Clone();
-                    //UpdateEmployeeInformationMenu(garage, cloneEmployeeForUpdate);
-                    //break;
+                    employeeService.DisplayWarehouseEmployee(garage);
+                    Employee selectedEmployeeToClone = employeeService.UpdateEmployeeInformation(garage);
+                    Employee clonedEmployee = (Employee)selectedEmployeeToClone.Clone();
+                    employeeService.AddEmployee(garage, clonedEmployee);
+                    UpdateEmployeeInformationMenu(garage, new[] { clonedEmployee }, true);
+                    break;
                 case 7:
                     Menu(garage);
                     break;
@@ -271,9 +271,10 @@ namespace WarehouseOOPMentoring
         /// Display to console 'Update employee information menu'
         /// </summary>
         /// <param name="garage">object</param>
-        public static void UpdateEmployeeInformationMenu(Warehouse garage, Employee[] searchedEntities = null)
+        public static void UpdateEmployeeInformationMenu(Warehouse garage, Employee[] searchedEntities = null, bool? isCloned = false)
         {
-            Employee employeeForUpdate = employeeService.UpdateEmployeeInformation(garage, searchedEntities);
+            Employee employeeForUpdate = isCloned == true ? 
+                searchedEntities[0] : employeeService.UpdateEmployeeInformation(garage, searchedEntities);
             while (true)
             {
                 Console.Clear();

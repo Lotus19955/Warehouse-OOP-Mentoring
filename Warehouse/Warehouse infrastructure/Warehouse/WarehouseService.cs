@@ -13,7 +13,6 @@ namespace Warehouse_infrastructure
         /// Create you warehouse objects
         /// </summary>
         /// <returns>object</returns>
-        /// <returns>object</returns>
         public Warehouse Create(ref Warehouse garage)
         {
             Console.WriteLine("First you need to add information about warehouse");
