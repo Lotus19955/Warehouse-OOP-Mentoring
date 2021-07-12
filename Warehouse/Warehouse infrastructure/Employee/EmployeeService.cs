@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class EmployeeService
+    public class EmployeeService : Employee, IService
     {
         private static ValidationService validationService = new ValidationService();
         /// <summary>
         /// Create you employee object
         /// </summary>
         /// <returns>object</returns>
-        public void CreateEmployee(Warehouse garage)
+        public void Create(Warehouse garage)
         {
             Console.WriteLine($"Number of free vacancy: {garage.Number_of_vacancy}");
             Console.Write("How many employees do you want to add: ");
@@ -27,7 +27,7 @@ namespace Warehouse_infrastructure
                         garage.Employee = new Employee[0];
                     }
                     for (int i = 0; i < employeeNumber; i++)
-                    { 
+                    {
                         validationService.Resize(garage, 1);
 
                         Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
@@ -50,7 +50,7 @@ namespace Warehouse_infrastructure
 
                         Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
                         string education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
-                        
+
                         garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
                         garage.UpdateVacancy(garage.Number_of_vacancy - 1);
                         Console.WriteLine("Employee created!");
@@ -105,9 +105,11 @@ namespace Warehouse_infrastructure
             return employeeForUpdate;
         }
         /// <summary>
-        /// Sort array of Employee by 'Age'
+        /// Sort array of Employee by 'Age' from older to younger
         /// </summary>
-        private void SortEmployeeByAge<T>(T[] array) where T : class
+        /// <typeparam name="T">where T : Employee, IComparable</typeparam>
+        /// <param name="array">Array tipe</param>
+        private void SortEmployeeByAge<T>(T[] array) where T : IComparable
         {
             for (int i = 0; i < array.Length; i++)
             {
@@ -115,7 +117,7 @@ namespace Warehouse_infrastructure
                 {
                     if (y <= array.Length - 1)
                     {
-                        if (array[i].Equals(array[y]))
+                        if (array[i].CompareTo(array[y]) < 0)
                         {
                             T x = array[i];
                             array[i] = array[y];
@@ -128,7 +130,7 @@ namespace Warehouse_infrastructure
         /// <summary>
         /// Display to console information about employees
         /// </summary>
-        /// <param name="employees">object</param>
+        /// <param name="garage">object</param>
         public void DisplayWarehouseEmployee(Warehouse garage)
         {
             if (validationService.ValidationEmployee(garage))
@@ -150,7 +152,7 @@ namespace Warehouse_infrastructure
         /// <summary>
         /// Find employee by 'Name' and 'Surname' in employee array
         /// </summary>
-        /// <param name="employees">object</param>
+        /// <param name="garage">object</param>
         public Employee[] SearchEmployeesByNameAndSurname(Warehouse garage)
         {
             if (validationService.ValidationEmployee(garage))
@@ -167,16 +169,16 @@ namespace Warehouse_infrastructure
                     Employee employee = garage.Employee[i];
                     if (employee.Name == name && employee.Surname == surname)
                     {
-                            validationService.Resize(ref searchedEntities, 1);
-                            searchedEntities[number] = garage.Employee[i];
-                            Console.WriteLine($"{number + 1}) {employee.ToString()}");
-                            number++;
+                        validationService.Resize(ref searchedEntities, 1);
+                        searchedEntities[number] = garage.Employee[i];
+                        Console.WriteLine($"{number + 1}) {employee.ToString()}");
+                        number++;
                     }
                 }
                 if (searchedEntities.Length == 0)
                 {
-                Console.WriteLine($"There is no employee with a name: {name}, surname: {surname}");
-                return null;
+                    Console.WriteLine($"There is no employee with a name: {name}, surname: {surname}");
+                    return null;
                 }
                 return searchedEntities;
             }
@@ -189,7 +191,7 @@ namespace Warehouse_infrastructure
         /// <summary>
         /// Remove employee from array
         /// </summary>
-        /// <param name="employees">object</param>
+        /// <param name="garage">object</param>
         public void RemoveEmployee(Warehouse garage)
         {
             if (validationService.ValidationEmployee(garage))
@@ -221,6 +223,24 @@ namespace Warehouse_infrastructure
                 Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
             }
         }
+        /// <summary>
+        /// Add employee to array
+        /// </summary>
+        /// <param name="garage">object</param>
+        public void AddEmployee(Warehouse garage, Employee addedEmployee)
+        {
+            if (validationService.ValidationEmployee(garage))
+            {
+                var arrayEmployee = garage.Employee;
+                Array.Resize(ref arrayEmployee, garage.Employee.Length + 1);
+                garage.Employee = arrayEmployee;
+                garage.Employee[garage.Employee.Length - 1] = addedEmployee;
+                garage.UpdateVacancy(garage.Number_of_vacancy - 1);
+            }
+            else
+            {
+                Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
+            }
+        }
     }
- }
-
+}

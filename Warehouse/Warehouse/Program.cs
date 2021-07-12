@@ -15,10 +15,9 @@ namespace WarehouseOOPMentoring
         private static EmployeeService employeeService = new EmployeeService();
         private static ValidationService validationService = new ValidationService();
         private static Stopwatch clock = new Stopwatch();
-        
         private static void Main(string[] args)
         {
-            warehouseService.CreateWarehouse(ref garage);
+            warehouseService.Create(ref garage);
             Menu(garage);
             Console.ReadLine();
         }
@@ -56,7 +55,7 @@ namespace WarehouseOOPMentoring
                         break;
                     case 4:
                         ClearInfoAboutWarehouse(ref garage);
-                        garage = warehouseService.CreateWarehouse(ref garage);
+                        garage = warehouseService.Create(ref garage);
                         break;
                     case 5:
                         TimeMenu();
@@ -111,8 +110,8 @@ namespace WarehouseOOPMentoring
                 case 4:
                     Console.Write("Enter new number of free 'Vacancy': ");
                     int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
-                    UpdateMenu(garage);
                     garage.UpdateVacancy(vacancy);
+                    UpdateMenu(garage);
                     break;
                 case 5:
                     break;
@@ -223,7 +222,8 @@ namespace WarehouseOOPMentoring
             Console.WriteLine($"3 - Update '{nameof(Employee)} information'");
             Console.WriteLine($"4 - Find {nameof(garage.Employee)} by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
             Console.WriteLine($"5 - Remove '{nameof(garage.Employee)}'");
-            Console.WriteLine($"6 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
+            Console.WriteLine($"6 - Create new '{nameof(Employee)}' based on the created");
+            Console.WriteLine($"7 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
             Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
@@ -236,7 +236,7 @@ namespace WarehouseOOPMentoring
                     EmployeeMenu(garage);
                     break;
                 case 2:
-                    employeeService.CreateEmployee(garage);
+                    employeeService.Create(garage);
                     EmployeeMenu(garage);
                     break;
                 case 3:
@@ -252,6 +252,14 @@ namespace WarehouseOOPMentoring
                     EmployeeMenu(garage);
                     break;
                 case 6:
+                    employeeService.DisplayWarehouseEmployee(garage);
+                    Employee selectedEmployeeToClone = employeeService.UpdateEmployeeInformation(garage);
+                    Employee clonedEmployee = (Employee)selectedEmployeeToClone.Clone();
+                    employeeService.AddEmployee(garage, clonedEmployee);
+                    UpdateEmployeeInformationMenu(garage, new[] { clonedEmployee }, true);
+                    break;
+                case 7:
+                    Menu(garage);
                     break;
                 default:
                     Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
@@ -263,9 +271,10 @@ namespace WarehouseOOPMentoring
         /// Display to console 'Update employee information menu'
         /// </summary>
         /// <param name="garage">object</param>
-        public static void UpdateEmployeeInformationMenu(Warehouse garage, Employee[] searchedEntities = null)
+        public static void UpdateEmployeeInformationMenu(Warehouse garage, Employee[] searchedEntities = null, bool? isCloned = false)
         {
-            Employee employeeForUpdate = employeeService.UpdateEmployeeInformation(garage, searchedEntities);
+            Employee employeeForUpdate = isCloned == true ? 
+                searchedEntities[0] : employeeService.UpdateEmployeeInformation(garage, searchedEntities);
             while (true)
             {
                 Console.Clear();

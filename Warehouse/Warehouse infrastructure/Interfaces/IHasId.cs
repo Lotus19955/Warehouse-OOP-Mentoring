@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
-    public class HasId
+    interface IHasId
     {
-        public Guid id {get; set;}
-        public HasId() 
-        {
-            this.id = Guid.NewGuid();
-        }
+        Guid id { get; set; }
     }
 }
