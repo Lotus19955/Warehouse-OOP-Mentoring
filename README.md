@@ -1,2 +1,2 @@
 # Warehouse-OOP-Mentoring
-Mentoring program for Andrei
+Education project for Andrei. OOP/C#/.NET entry level.
