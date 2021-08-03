@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Warehouse_infrastructure
 {
+    [Serializable]
     public class Warehouse 
     {
         private string title;
@@ -38,6 +40,7 @@ namespace Warehouse_infrastructure
             get { return employee; }
             set { employee = value; }
         }
+        public Warehouse() { }
         public Warehouse(string title, string address, string number, int vacancy)
         {
             this.Title = title;

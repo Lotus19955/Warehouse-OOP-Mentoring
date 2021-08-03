@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+
 
 namespace Warehouse_infrastructure
 { 
@@ -15,19 +18,25 @@ namespace Warehouse_infrastructure
         /// <returns>object</returns>
         public Warehouse Create(ref Warehouse garage)
         {
-            Console.WriteLine("First you need to add information about warehouse");
-            Console.Write($"Enter '{nameof(Warehouse.Title)}': ");
-            string title = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Title));
+            BinaryFormatter Formatter = new BinaryFormatter();
+            using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
+                FileMode.OpenOrCreate))
+            {
+                Console.WriteLine("First you need to add information about warehouse");
+                Console.Write($"Enter '{nameof(Warehouse.Title)}': ");
+                string title = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Title));
 
-            Console.Write($"Enter '{nameof(Warehouse.Address)}': ");
-            string address = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Address));
+                Console.Write($"Enter '{nameof(Warehouse.Address)}': ");
+                string address = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Address));
 
-            Console.Write($"Enter  'Contact {nameof(Warehouse.Contact_Number)}': ");
-            string number = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Contact_Number));
+                Console.Write($"Enter  'Contact {nameof(Warehouse.Contact_Number)}': ");
+                string number = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Contact_Number));
 
-            Console.Write($"Enter  '{nameof(Warehouse.Number_of_vacancy)}': ");
-            int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Number_of_vacancy));
-            garage = new Warehouse(title, address, number, vacancy);
+                Console.Write($"Enter  '{nameof(Warehouse.Number_of_vacancy)}': ");
+                int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Number_of_vacancy));
+                garage = new Warehouse(title, address, number, vacancy);
+                Formatter.Serialize(fs, garage);
+            }
             return garage;
         }
         /// <summary>

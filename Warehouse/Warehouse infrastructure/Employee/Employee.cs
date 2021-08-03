@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
+    [Serializable]
     public class Employee : Person, ICloneable, IComparable, IComparer<Employee>
     { 
         private string job;

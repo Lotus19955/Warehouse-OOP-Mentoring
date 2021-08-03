@@ -19,13 +19,25 @@ namespace Warehouse_infrastructure.Tests
             int number = 5;
             int expected = 5;
 
-            //actual
+            //act
             Warehouse x = new Warehouse("Home", "Minsk", "12345678", vacancy);
             x.UpdateVacancy(number);
             int actual = x.Number_of_vacancy;
 
             //assert
             Assert.AreEqual(expected, actual);
+        }
+        public void DisplayTest()
+        {
+            // arrange
+            string country = "Belarus";
+
+            //act
+            WarehouseService warehouseService = new WarehouseService();
+            warehouseService.Display(country, country);
+
+            //assert
+            
         }
     }
 }

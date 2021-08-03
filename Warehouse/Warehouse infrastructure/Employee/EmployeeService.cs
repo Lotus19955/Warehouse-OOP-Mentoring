@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Warehouse_infrastructure
-{
+{   [Serializable]
     public class EmployeeService : Employee, IService
     {
         private static ValidationService validationService = new ValidationService();
@@ -53,6 +55,7 @@ namespace Warehouse_infrastructure
 
                         garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
                         garage.UpdateVacancy(garage.Number_of_vacancy - 1);
+
                         Console.WriteLine("Employee created!");
                         Console.WriteLine();
                     }
@@ -105,11 +108,11 @@ namespace Warehouse_infrastructure
             return employeeForUpdate;
         }
         /// <summary>
-        /// Sort array of Employee by 'Age' from older to younger
+        /// Sort array of Employee by 'Age' from younger to older 
         /// </summary>
         /// <typeparam name="T">where T : Employee, IComparable</typeparam>
         /// <param name="array">Array tipe</param>
-        private void SortEmployeeByAge<T>(T[] array) where T : IComparable
+        public void SortEmployeeByAge<T>(T[] array) where T : IComparable
         {
             for (int i = 0; i < array.Length; i++)
             {
@@ -117,7 +120,7 @@ namespace Warehouse_infrastructure
                 {
                     if (y <= array.Length - 1)
                     {
-                        if (array[i].CompareTo(array[y]) < 0)
+                        if (array[i].CompareTo(array[y]) > 0)
                         {
                             T x = array[i];
                             array[i] = array[y];

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Warehouse_infrastructure;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace WarehouseOOPMentoring
 {
@@ -15,9 +17,42 @@ namespace WarehouseOOPMentoring
         private static EmployeeService employeeService = new EmployeeService();
         private static ValidationService validationService = new ValidationService();
         private static Stopwatch clock = new Stopwatch();
+        private static BinaryFormatter Formatter = new BinaryFormatter();
         private static void Main(string[] args)
         {
-            warehouseService.Create(ref garage);
+            using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
+                FileMode.OpenOrCreate))
+            {
+                garage = (Warehouse)Formatter.Deserialize(fs);
+                garage = new Warehouse(garage.Title, garage.Address, garage.Contact_Number, garage.Number_of_vacancy);
+            }
+            if (garage == null)
+            {
+                warehouseService.Create(ref garage);
+            }
+            try
+            {
+                if(!validationService.ValidationEmployee(garage))
+                {
+                    garage.Employee = new Employee[0];
+                }
+                using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat",
+                FileMode.OpenOrCreate))
+                if (fs != null)
+                {
+                    Employee[] savedEmployee = (Employee[])Formatter.Deserialize(fs);
+                    foreach (Employee p in savedEmployee)
+                    {
+                        validationService.Resize(garage, 1);
+                        garage.Employee[garage.Employee.Length - 1] = new Employee(p.Name, p.Surname, p.Age, p.Job, p.Address, p.Contact_Number, p.Education);
+                        garage.UpdateVacancy(garage.Number_of_vacancy - 1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             Menu(garage);
             Console.ReadLine();
         }
@@ -93,24 +128,44 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    Console.Write("Enter new 'Title': ");
-                    garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
+                    using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
+                        FileMode.OpenOrCreate))
+                    {
+                        Console.Write("Enter new 'Title': ");
+                        garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
+                        Formatter.Serialize(fs, garage);
+                    }
                     UpdateMenu(garage);
                     break;
                 case 2:
-                    Console.Write("Enter new 'Address': ");
-                    garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
+                    using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
+                       FileMode.OpenOrCreate))
+                    {
+                        Console.Write("Enter new 'Address': ");
+                        garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
+                        Formatter.Serialize(fs, garage);
+                    }
                     UpdateMenu(garage);
                     break;
                 case 3:
-                    Console.Write("Enter new 'Contact number': ");
-                    garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
+                    using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
+                       FileMode.OpenOrCreate))
+                    {
+                        Console.Write("Enter new 'Contact number': ");
+                        garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
+                        Formatter.Serialize(fs, garage);
+                    }
                     UpdateMenu(garage);
                     break;
                 case 4:
-                    Console.Write("Enter new number of free 'Vacancy': ");
-                    int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
-                    garage.UpdateVacancy(vacancy);
+                    using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
+                       FileMode.OpenOrCreate))
+                    {
+                        Console.Write("Enter new number of free 'Vacancy': ");
+                        int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
+                        garage.UpdateVacancy(vacancy);
+                        Formatter.Serialize(fs, garage);
+                    }
                     UpdateMenu(garage);
                     break;
                 case 5:
@@ -216,6 +271,12 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void EmployeeMenu(Warehouse garage)
         {
+            BinaryFormatter Formatter = new BinaryFormatter();
+            using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat",
+                FileMode.OpenOrCreate))
+            {
+                Formatter.Serialize(fs, garage.Employee);
+            }
             Console.WriteLine("\n\t Employee Menu");
             Console.WriteLine($"1 - Display '{nameof(Employee)}'");
             Console.WriteLine($"2 - Create new '{nameof(Employee)}'");
