@@ -18,43 +18,17 @@ namespace WarehouseOOPMentoring
         private static ValidationService validationService = new ValidationService();
         private static Stopwatch clock = new Stopwatch();
         private static BinaryFormatter Formatter = new BinaryFormatter();
+
         private static void Main(string[] args)
         {
-            using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
-                FileMode.OpenOrCreate))
-            {
-                garage = (Warehouse)Formatter.Deserialize(fs);
-                garage = new Warehouse(garage.Title, garage.Address, garage.Contact_Number, garage.Number_of_vacancy);
-            }
+            FolderService.UploadWarehouseData(ref garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
+            FolderService.UploadEmployeeData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat");
             if (garage == null)
             {
                 warehouseService.Create(ref garage);
             }
-            try
-            {
-                if(!validationService.ValidationEmployee(garage))
-                {
-                    garage.Employee = new Employee[0];
-                }
-                using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat",
-                FileMode.OpenOrCreate))
-                if (fs != null)
-                {
-                    Employee[] savedEmployee = (Employee[])Formatter.Deserialize(fs);
-                    foreach (Employee p in savedEmployee)
-                    {
-                        validationService.Resize(garage, 1);
-                        garage.Employee[garage.Employee.Length - 1] = new Employee(p.Name, p.Surname, p.Age, p.Job, p.Address, p.Contact_Number, p.Education);
-                        garage.UpdateVacancy(garage.Number_of_vacancy - 1);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            Menu(garage);
-            Console.ReadLine();
+                Menu(garage);
+                Console.ReadLine();
         }
         /// <summary>
         /// Object menu
@@ -128,44 +102,28 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
-                        FileMode.OpenOrCreate))
-                    {
-                        Console.Write("Enter new 'Title': ");
-                        garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
-                        Formatter.Serialize(fs, garage);
-                    }
+                    Console.Write("Enter new 'Title': ");
+                    garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
+                    FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
                     UpdateMenu(garage);
                     break;
                 case 2:
-                    using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
-                       FileMode.OpenOrCreate))
-                    {
-                        Console.Write("Enter new 'Address': ");
-                        garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
-                        Formatter.Serialize(fs, garage);
-                    }
+                    Console.Write("Enter new 'Address': ");
+                    garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
+                    FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
                     UpdateMenu(garage);
                     break;
                 case 3:
-                    using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
-                       FileMode.OpenOrCreate))
-                    {
-                        Console.Write("Enter new 'Contact number': ");
-                        garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
-                        Formatter.Serialize(fs, garage);
-                    }
+                    Console.Write("Enter new 'Contact number': ");
+                    garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
+                    FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
                     UpdateMenu(garage);
                     break;
                 case 4:
-                    using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
-                       FileMode.OpenOrCreate))
-                    {
-                        Console.Write("Enter new number of free 'Vacancy': ");
-                        int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
-                        garage.UpdateVacancy(vacancy);
-                        Formatter.Serialize(fs, garage);
-                    }
+                    Console.Write("Enter new number of free 'Vacancy': ");
+                    int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
+                    garage.UpdateVacancy(vacancy);
+                    FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
                     UpdateMenu(garage);
                     break;
                 case 5:
@@ -271,12 +229,7 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void EmployeeMenu(Warehouse garage)
         {
-            BinaryFormatter Formatter = new BinaryFormatter();
-            using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat",
-                FileMode.OpenOrCreate))
-            {
-                Formatter.Serialize(fs, garage.Employee);
-            }
+            FolderService.SaveData(garage.Employee, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat");
             Console.WriteLine("\n\t Employee Menu");
             Console.WriteLine($"1 - Display '{nameof(Employee)}'");
             Console.WriteLine($"2 - Create new '{nameof(Employee)}'");
@@ -334,7 +287,7 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void UpdateEmployeeInformationMenu(Warehouse garage, Employee[] searchedEntities = null, bool? isCloned = false)
         {
-            Employee employeeForUpdate = isCloned == true ? 
+            Employee employeeForUpdate = isCloned == true ?
                 searchedEntities[0] : employeeService.UpdateEmployeeInformation(garage, searchedEntities);
             while (true)
             {

@@ -18,9 +18,6 @@ namespace Warehouse_infrastructure
         /// <returns>object</returns>
         public Warehouse Create(ref Warehouse garage)
         {
-            BinaryFormatter Formatter = new BinaryFormatter();
-            using (FileStream fs = new FileStream(@"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat",
-                FileMode.OpenOrCreate))
             {
                 Console.WriteLine("First you need to add information about warehouse");
                 Console.Write($"Enter '{nameof(Warehouse.Title)}': ");
@@ -35,7 +32,7 @@ namespace Warehouse_infrastructure
                 Console.Write($"Enter  '{nameof(Warehouse.Number_of_vacancy)}': ");
                 int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Number_of_vacancy));
                 garage = new Warehouse(title, address, number, vacancy);
-                Formatter.Serialize(fs, garage);
+                FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
             }
             return garage;
         }
