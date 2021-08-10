@@ -27,6 +27,7 @@ namespace WarehouseOOPMentoring
                 logger.Log("Program is running");
                 FolderService.UploadWarehouseData(ref garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
                 FolderService.UploadEmployeeData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat");
+                logger.Log("Data download completed");
                 if (garage == null)
                 {
                     warehouseService.Create(ref garage);

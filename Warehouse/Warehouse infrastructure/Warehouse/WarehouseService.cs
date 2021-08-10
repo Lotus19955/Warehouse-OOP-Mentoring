@@ -12,6 +12,7 @@ namespace Warehouse_infrastructure
     public class WarehouseService : EmployeeService, IService
     {
         private static ValidationService validationService = new ValidationService();
+        private static Logger logger = new Logger();
         /// <summary>
         /// Create you warehouse objects
         /// </summary>
@@ -33,6 +34,14 @@ namespace Warehouse_infrastructure
                 int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Number_of_vacancy));
                 garage = new Warehouse(title, address, number, vacancy);
                 FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
+                try
+                {
+                    logger.Log("New object 'garage' created");
+                }
+                catch (Exception ex)
+                {
+                    logger.Log(ex.Message);
+                }
             }
             return garage;
         }

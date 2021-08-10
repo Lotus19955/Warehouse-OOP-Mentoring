@@ -13,18 +13,35 @@ namespace Warehouse_infrastructure
     {
         private static ValidationService validationService = new ValidationService();
         private static BinaryFormatter Formatter = new BinaryFormatter();
+        private static Logger logger = new Logger();
         public static void SaveData(Warehouse objectForSave, string folderForSave)
         {
-            using (FileStream fs = new FileStream(folderForSave, FileMode.OpenOrCreate))
+            try
             {
-                Formatter.Serialize(fs, @objectForSave);
+                using (FileStream fs = new FileStream(folderForSave, FileMode.OpenOrCreate))
+                {
+                    Formatter.Serialize(fs, @objectForSave);
+                }
+                logger.Log("Warehouse object saved");
+            }
+            catch(Exception ex)
+            {
+                logger.Log(ex.Message);
             }
         }
         public static void SaveData(Employee[] arrObjectForSave, string folderForSave)
         {
-            using (FileStream fs = new FileStream(folderForSave, FileMode.OpenOrCreate))
+            try
             {
-                Formatter.Serialize(fs, arrObjectForSave);
+                using (FileStream fs = new FileStream(folderForSave, FileMode.OpenOrCreate))
+                {
+                    Formatter.Serialize(fs, arrObjectForSave);
+                }
+                logger.Log("Employee object saved");
+            }
+            catch (Exception ex)
+            {
+                logger.Log(ex.Message);
             }
         }
         public static void UploadWarehouseData(ref Warehouse objectForSave, string folderForSave)

@@ -43,7 +43,7 @@ namespace Warehouse_infrastructure
             using (StreamWriter w = File.AppendText(this.FilePath))
             {
                 w.Write("\r\nLog Entry : ");
-                w.WriteLine(DateTime.Now.ToLongDateString());
+                w.WriteLine(DateTime.UtcNow);
                 w.WriteLine(message);
                 w.WriteLine("----------------------------------");
             }
