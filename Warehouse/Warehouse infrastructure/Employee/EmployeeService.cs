@@ -7,10 +7,12 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Warehouse_infrastructure
+
 {   [Serializable]
     public class EmployeeService : Employee, IService
     {
         private static ValidationService validationService = new ValidationService();
+        private static Logger logger = new Logger();
         /// <summary>
         /// Create you employee object
         /// </summary>
@@ -55,7 +57,14 @@ namespace Warehouse_infrastructure
 
                         garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
                         garage.UpdateVacancy(garage.Number_of_vacancy - 1);
-
+                        try
+                        {
+                            logger.Log("Add new employee with id: " + garage.Employee[garage.Employee.Length - 1].id);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Log(ex.Message);
+                        }
                         Console.WriteLine("Employee created!");
                         Console.WriteLine();
                     }

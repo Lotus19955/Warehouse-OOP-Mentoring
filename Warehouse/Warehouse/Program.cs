@@ -18,17 +18,26 @@ namespace WarehouseOOPMentoring
         private static ValidationService validationService = new ValidationService();
         private static Stopwatch clock = new Stopwatch();
         private static BinaryFormatter Formatter = new BinaryFormatter();
+        private static Logger logger = new Logger();
 
         private static void Main(string[] args)
         {
-            FolderService.UploadWarehouseData(ref garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
-            FolderService.UploadEmployeeData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat");
-            if (garage == null)
+            try
             {
-                warehouseService.Create(ref garage);
-            }
+                logger.Log("Program is running");
+                FolderService.UploadWarehouseData(ref garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
+                FolderService.UploadEmployeeData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat");
+                if (garage == null)
+                {
+                    warehouseService.Create(ref garage);
+                }
                 Menu(garage);
                 Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                logger.Log(ex.Message);
+            }
         }
         /// <summary>
         /// Object menu
