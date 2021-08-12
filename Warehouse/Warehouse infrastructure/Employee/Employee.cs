@@ -92,11 +92,12 @@ namespace Warehouse_infrastructure
                     return -1;
                 else if (this.Age > p.Age)
                     return 1;
+                
                 else return 0;
             }
             else
             {
-                throw new Exception("Параметр должен быть типа 'Person'");
+                throw new Exception("The parameter must be of type 'Person'");
             }
         }
         public int Compare(Employee x, Employee y)

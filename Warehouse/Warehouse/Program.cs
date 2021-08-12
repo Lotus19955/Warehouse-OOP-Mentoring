@@ -15,19 +15,20 @@ namespace WarehouseOOPMentoring
         private static Warehouse garage = null;
         private static WarehouseService warehouseService = new WarehouseService();
         private static EmployeeService employeeService = new EmployeeService();
-        private static ValidationService validationService = new ValidationService();
+        private static ValidationService<object> validationService = new ValidationService<object>();
         private static Stopwatch clock = new Stopwatch();
         private static BinaryFormatter Formatter = new BinaryFormatter();
         private static Logger logger = new Logger();
+        private static FolderService<object> folderService = new FolderService<object>(); 
 
         private static void Main(string[] args)
         {
             try
             {
-                logger.Log("Program is running");
-                FolderService.UploadWarehouseData(ref garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
-                FolderService.UploadEmployeeData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat");
-                logger.Log("Data download completed");
+                folderService.DownloadWarehouseData(ref garage, FolderService<object>.Folder.Warehouse);
+                folderService.DownloadEmployeeData(garage, FolderService<object>.Folder.Employee);
+                logger.Log(AppConstants.Alert.PROGRAM_IS_RUNNING,LogLevel.Information);
+                logger.Log(AppConstants.Alert.DATA_DOWNLOAD_COMPLITED, LogLevel.Information);
                 if (garage == null)
                 {
                     warehouseService.Create(ref garage);
@@ -37,7 +38,7 @@ namespace WarehouseOOPMentoring
             }
             catch (Exception ex)
             {
-                logger.Log(ex.Message);
+                logger.Log(ex.Message,LogLevel.Error);
             }
         }
         /// <summary>
@@ -112,28 +113,19 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    Console.Write("Enter new 'Title': ");
-                    garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
-                    FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
+                    warehouseService.UpdateTitle(ref garage);
                     UpdateMenu(garage);
                     break;
                 case 2:
-                    Console.Write("Enter new 'Address': ");
-                    garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
-                    FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
+                    warehouseService.UpdateAddress(ref garage);
                     UpdateMenu(garage);
                     break;
                 case 3:
-                    Console.Write("Enter new 'Contact number': ");
-                    garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
-                    FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
+                    warehouseService.UpdateNumber(ref garage);
                     UpdateMenu(garage);
                     break;
                 case 4:
-                    Console.Write("Enter new number of free 'Vacancy': ");
-                    int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
-                    garage.UpdateVacancy(vacancy);
-                    FolderService.SaveData(garage, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\WarehouseData.dat");
+                    warehouseService.UpdateVacancy(ref garage);
                     UpdateMenu(garage);
                     break;
                 case 5:
@@ -239,7 +231,6 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void EmployeeMenu(Warehouse garage)
         {
-            FolderService.SaveData(garage.Employee, @"D:\VS\Проекты\Warehouse-OOP-Mentoring\EmployeeData.dat");
             Console.WriteLine("\n\t Employee Menu");
             Console.WriteLine($"1 - Display '{nameof(Employee)}'");
             Console.WriteLine($"2 - Create new '{nameof(Employee)}'");
@@ -351,6 +342,7 @@ namespace WarehouseOOPMentoring
                         Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                         break;
                 }
+
             }
         }
         /// <summary>
