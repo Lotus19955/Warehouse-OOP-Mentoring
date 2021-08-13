@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Warehouse_infrastructure
 {
-    public class ValidationService<T>
+    public class ValidationService
     {
         /// <summary>
         /// Check objects parameters for null or empty
@@ -93,7 +93,7 @@ namespace Warehouse_infrastructure
         /// Clone Array, put null element to last slot
         /// </summary>
         /// <param name="array">Take any array</param>
-        public void CloneArray(T[] array)
+        public void CloneArray<T>(T[] array)
         {
             T[] tempArray = new T[array.Length];
             for (int i = 0; i < array.Length; i++)
