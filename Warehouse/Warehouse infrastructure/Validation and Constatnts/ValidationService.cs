@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Warehouse_infrastructure
 {
-    public class ValidationService
+    public class ValidationService<T>
     {
         /// <summary>
         /// Check objects parameters for null or empty
@@ -81,6 +82,35 @@ namespace Warehouse_infrastructure
                 temp[i] = employee[i];
             }
             employee = temp;
+        }
+        public void ValidationSavingPath(string savePath)
+        {
+            if (!Directory.Exists(savePath))
+            {
+                Directory.CreateDirectory(savePath);
+            }
+        }/// <summary>
+        /// Clone Array, put null element to last slot
+        /// </summary>
+        /// <param name="array">Take any array</param>
+        public void CloneArray(T[] array)
+        {
+            T[] tempArray = new T[array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] != null)
+                {
+                    tempArray[i] = array[i];
+                }
+                else
+                {
+                    T x = array[i];
+                    array[i] = array[array.Length - 1];
+                    array[array.Length - 1] = x;
+                    tempArray[i] = array[i];
+                }
+            }
+            array = tempArray;
         }
     }
 }

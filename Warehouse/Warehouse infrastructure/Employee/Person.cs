@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
+    [Serializable]
     public abstract class Person : IHasId
     { 
         private string name;

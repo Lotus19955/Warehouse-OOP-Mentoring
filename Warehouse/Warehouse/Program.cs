@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Warehouse_infrastructure;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace WarehouseOOPMentoring
 {
@@ -13,13 +15,31 @@ namespace WarehouseOOPMentoring
         private static Warehouse garage = null;
         private static WarehouseService warehouseService = new WarehouseService();
         private static EmployeeService employeeService = new EmployeeService();
-        private static ValidationService validationService = new ValidationService();
+        private static ValidationService<object> validationService = new ValidationService<object>();
         private static Stopwatch clock = new Stopwatch();
+        private static BinaryFormatter Formatter = new BinaryFormatter();
+        private static Logger logger = new Logger();
+        private static FolderService<object> folderService = new FolderService<object>(); 
+
         private static void Main(string[] args)
         {
-            warehouseService.Create(ref garage);
-            Menu(garage);
-            Console.ReadLine();
+            try
+            {
+                folderService.DownloadWarehouseData(ref garage, FolderService<object>.Folder.Warehouse);
+                folderService.DownloadEmployeeData(garage, FolderService<object>.Folder.Employee);
+                logger.Log(AppConstants.Alert.PROGRAM_IS_RUNNING,LogLevel.Information);
+                logger.Log(AppConstants.Alert.DATA_DOWNLOAD_COMPLITED, LogLevel.Information);
+                if (garage == null)
+                {
+                    warehouseService.Create(ref garage);
+                }
+                Menu(garage);
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                logger.Log(ex.Message,LogLevel.Error);
+            }
         }
         /// <summary>
         /// Object menu
@@ -93,24 +113,19 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    Console.Write("Enter new 'Title': ");
-                    garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
+                    warehouseService.UpdateTitle(ref garage);
                     UpdateMenu(garage);
                     break;
                 case 2:
-                    Console.Write("Enter new 'Address': ");
-                    garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
+                    warehouseService.UpdateAddress(ref garage);
                     UpdateMenu(garage);
                     break;
                 case 3:
-                    Console.Write("Enter new 'Contact number': ");
-                    garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
+                    warehouseService.UpdateNumber(ref garage);
                     UpdateMenu(garage);
                     break;
                 case 4:
-                    Console.Write("Enter new number of free 'Vacancy': ");
-                    int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
-                    garage.UpdateVacancy(vacancy);
+                    warehouseService.UpdateVacancy(ref garage);
                     UpdateMenu(garage);
                     break;
                 case 5:
@@ -273,7 +288,7 @@ namespace WarehouseOOPMentoring
         /// <param name="garage">object</param>
         public static void UpdateEmployeeInformationMenu(Warehouse garage, Employee[] searchedEntities = null, bool? isCloned = false)
         {
-            Employee employeeForUpdate = isCloned == true ? 
+            Employee employeeForUpdate = isCloned == true ?
                 searchedEntities[0] : employeeService.UpdateEmployeeInformation(garage, searchedEntities);
             while (true)
             {
@@ -327,6 +342,7 @@ namespace WarehouseOOPMentoring
                         Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                         break;
                 }
+
             }
         }
         /// <summary>

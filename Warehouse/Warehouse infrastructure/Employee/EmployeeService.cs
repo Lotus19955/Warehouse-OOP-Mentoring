@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Warehouse_infrastructure
-{
+
+{   [Serializable]
     public class EmployeeService : Employee, IService
     {
-        private static ValidationService validationService = new ValidationService();
+        private static ValidationService<object> validationService = new ValidationService<object>();
+        private static Logger logger = new Logger();
+        private FolderService<object> folderService = new FolderService<object>();
         /// <summary>
         /// Create you employee object
         /// </summary>
@@ -28,31 +33,40 @@ namespace Warehouse_infrastructure
                     }
                     for (int i = 0; i < employeeNumber; i++)
                     {
-                        validationService.Resize(garage, 1);
+                        try
+                        {
+                            validationService.Resize(garage, 1);
 
-                        Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
-                        string name = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
+                            Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
+                            string name = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
 
-                        Console.Write($"Enter '{nameof(Employee.Surname)}' of employee: ");
-                        string surname = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
+                            Console.Write($"Enter '{nameof(Employee.Surname)}' of employee: ");
+                            string surname = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
 
-                        Console.Write($"Enter '{nameof(Employee.Age)}' of employee: ");
-                        int age = validationService.TrySetNumber(Console.ReadLine(), nameof(Employee.Age));
+                            Console.Write($"Enter '{nameof(Employee.Age)}' of employee: ");
+                            int age = validationService.TrySetNumber(Console.ReadLine(), nameof(Employee.Age));
 
-                        Console.Write($"Enter '{nameof(Employee.Job)}' of employee: ");
-                        string job = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Job));
+                            Console.Write($"Enter '{nameof(Employee.Job)}' of employee: ");
+                            string job = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Job));
 
-                        Console.Write($"Enter '{nameof(Employee.Address)}' of employee: ");
-                        string address = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Address));
+                            Console.Write($"Enter '{nameof(Employee.Address)}' of employee: ");
+                            string address = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Address));
 
-                        Console.Write($"Enter 'Contact {nameof(Employee.Contact_Number)}' of employee: ");
-                        string number = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Contact_Number));
+                            Console.Write($"Enter 'Contact {nameof(Employee.Contact_Number)}' of employee: ");
+                            string number = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Contact_Number));
 
-                        Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
-                        string education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
+                            Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
+                            string education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
 
-                        garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
-                        garage.UpdateVacancy(garage.Number_of_vacancy - 1);
+                            garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
+                            garage.UpdateVacancy(garage.Number_of_vacancy - 1);
+                            folderService.SaveData(garage.Employee, FolderService<object>.Folder.Employee);
+                            logger.Log(AppConstants.Alert.ADDED_NEW_EMPLOYEE_WITH_ID + garage.Employee[garage.Employee.Length - 1].id,LogLevel.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Log(ex.Message,LogLevel.Error);
+                        }
                         Console.WriteLine("Employee created!");
                         Console.WriteLine();
                     }
@@ -102,14 +116,15 @@ namespace Warehouse_infrastructure
                 Console.WriteLine("'Number' is incorrect value");
                 UpdateEmployeeInformation(garage, searchedEntities);
             }
+            folderService.SaveData(garage.Employee, FolderService<object>.Folder.Employee);
             return employeeForUpdate;
         }
         /// <summary>
-        /// Sort array of Employee by 'Age' from older to younger
+        /// Sort array of Employee by 'Age' from younger to older 
         /// </summary>
         /// <typeparam name="T">where T : Employee, IComparable</typeparam>
         /// <param name="array">Array tipe</param>
-        private void SortEmployeeByAge<T>(T[] array) where T : IComparable
+        public void SortEmployeeByAge<T>(T[] array) where T : IComparable
         {
             for (int i = 0; i < array.Length; i++)
             {
@@ -117,7 +132,7 @@ namespace Warehouse_infrastructure
                 {
                     if (y <= array.Length - 1)
                     {
-                        if (array[i].CompareTo(array[y]) < 0)
+                        if (array[i].CompareTo(array[y]) > 0)
                         {
                             T x = array[i];
                             array[i] = array[y];
@@ -204,7 +219,7 @@ namespace Warehouse_infrastructure
                     if (intChoice < garage.Employee.Length && intChoice >= 1)
                     {
                         int x;
-                        int index = intChoice--;
+                        int index = intChoice-1;
                         garage.Employee[index] = null;
                         for (int i = 0; i < garage.Employee.Length; i++)
                         {
@@ -212,8 +227,11 @@ namespace Warehouse_infrastructure
                             intChoice = index;
                             index = x;
                         }
+                        validationService.CloneArray(garage.Employee);
                         var arrayEmployee = garage.Employee;
                         Array.Resize(ref arrayEmployee, garage.Employee.Length - 1);
+                        garage.Employee = arrayEmployee;
+                        SortEmployeeByAge<Employee>(garage.Employee);
                         garage.UpdateVacancy(garage.Number_of_vacancy + 1);
                     }
                 }
@@ -222,6 +240,7 @@ namespace Warehouse_infrastructure
             {
                 Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
             }
+            folderService.SaveData(garage.Employee, FolderService<object>.Folder.Employee);
         }
         /// <summary>
         /// Add employee to array
