@@ -11,9 +11,9 @@ namespace Warehouse_infrastructure
 {   [Serializable]
     public class EmployeeService : Employee, IService
     {
-        private static ValidationService<object> validationService = new ValidationService<object>();
+        private static ValidationService validationService = new ValidationService();
         private static Logger logger = new Logger();
-        private FolderService<object> folderService = new FolderService<object>();
+        private FolderService folderService = new FolderService();
         /// <summary>
         /// Create you employee object
         /// </summary>
@@ -60,7 +60,7 @@ namespace Warehouse_infrastructure
 
                             garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
                             garage.UpdateVacancy(garage.Number_of_vacancy - 1);
-                            folderService.SaveData(garage.Employee, FolderService<object>.Folder.Employee);
+                            folderService.SaveData(garage.Employee, FolderService.Folder.Employee);
                             logger.Log(AppConstants.Alert.ADDED_NEW_EMPLOYEE_WITH_ID + garage.Employee[garage.Employee.Length - 1].id,LogLevel.Information);
                         }
                         catch (Exception ex)
@@ -116,7 +116,7 @@ namespace Warehouse_infrastructure
                 Console.WriteLine("'Number' is incorrect value");
                 UpdateEmployeeInformation(garage, searchedEntities);
             }
-            folderService.SaveData(garage.Employee, FolderService<object>.Folder.Employee);
+            folderService.SaveData(garage.Employee, FolderService.Folder.Employee);
             return employeeForUpdate;
         }
         /// <summary>
@@ -240,7 +240,7 @@ namespace Warehouse_infrastructure
             {
                 Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
             }
-            folderService.SaveData(garage.Employee, FolderService<object>.Folder.Employee);
+            folderService.SaveData(garage.Employee, FolderService.Folder.Employee);
         }
         /// <summary>
         /// Add employee to array

@@ -10,16 +10,16 @@ using System.Configuration;
 
 namespace Warehouse_infrastructure
 {
-    public class FolderService<T>
+    public class FolderService
     {/// <summary>
-    /// 
+    /// Choose name of file to save data
     /// </summary>
         public enum Folder
         {
             Warehouse = 1,
             Employee
         }
-        private static ValidationService<object> validationService = new ValidationService<object>();
+        private static ValidationService validationService = new ValidationService();
         private static BinaryFormatter Formatter = new BinaryFormatter();
         private static Logger logger = new Logger();
         string  savePath = @"D:\VS\Проекты\Warehouse-OOP-Mentoring\Store\";
@@ -28,7 +28,7 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="objectForSave">Witch object you need to save</param>
         /// <param name="folderForSave">Choose to what folder you need to save</param>
-        public void SaveData(T objectForSave, Folder folderForSave)
+        public void SaveData<T>(T objectForSave, Folder folderForSave)
         {
             validationService.ValidationSavingPath(savePath);
             try
@@ -49,7 +49,7 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="objectForSave">Witch object you need to save</param>
         /// <param name="folderForSave">Choose to what folder you need to save</param>
-        public void SaveData(T[] objectForSave, Folder folderForSave)
+        public void SaveData<T>(T[] objectForSave, Folder folderForSave)
         {
             validationService.ValidationSavingPath(savePath);
             try
@@ -106,6 +106,5 @@ namespace Warehouse_infrastructure
                 }
             }
         }
-        
     }
 }

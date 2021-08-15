@@ -27,7 +27,7 @@ namespace Warehouse_infrastructure
 
     public class Logger : LogBase
     {
-        private static ValidationService<object> validationService = new ValidationService<object>();
+        private static ValidationService validationService = new ValidationService();
         private string CurrentDirectory
         {
             get;

@@ -15,18 +15,18 @@ namespace WarehouseOOPMentoring
         private static Warehouse garage = null;
         private static WarehouseService warehouseService = new WarehouseService();
         private static EmployeeService employeeService = new EmployeeService();
-        private static ValidationService<object> validationService = new ValidationService<object>();
+        private static ValidationService validationService = new ValidationService();
         private static Stopwatch clock = new Stopwatch();
         private static BinaryFormatter Formatter = new BinaryFormatter();
         private static Logger logger = new Logger();
-        private static FolderService<object> folderService = new FolderService<object>(); 
+        private static FolderService folderService = new FolderService(); 
 
         private static void Main(string[] args)
         {
             try
             {
-                folderService.DownloadWarehouseData(ref garage, FolderService<object>.Folder.Warehouse);
-                folderService.DownloadEmployeeData(garage, FolderService<object>.Folder.Employee);
+                folderService.DownloadWarehouseData(ref garage, FolderService.Folder.Warehouse);
+                folderService.DownloadEmployeeData(garage, FolderService.Folder.Employee);
                 logger.Log(AppConstants.Alert.PROGRAM_IS_RUNNING,LogLevel.Information);
                 logger.Log(AppConstants.Alert.DATA_DOWNLOAD_COMPLITED, LogLevel.Information);
                 if (garage == null)
