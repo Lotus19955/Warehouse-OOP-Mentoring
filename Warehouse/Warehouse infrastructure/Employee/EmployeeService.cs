@@ -27,16 +27,11 @@ namespace Warehouse_infrastructure
             {
                 if (employeeNumber <= garage.Number_of_vacancy)
                 {
-                    if (!validationService.ValidationEmployee(garage))
-                    {
-                        garage.Employee = new Employee[0];
-                    }
+                    List<Employee> employee = new List<Employee>();
                     for (int i = 0; i < employeeNumber; i++)
                     {
                         try
                         {
-                            validationService.Resize(garage, 1);
-
                             Console.Write($"Enter '{nameof(Employee.Name)}' of employee: ");
                             string name = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
 
@@ -58,10 +53,11 @@ namespace Warehouse_infrastructure
                             Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
                             string education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
 
-                            garage.Employee[garage.Employee.Length - 1] = new Employee(name, surname, age, job, address, number, education);
+                            employee.Add(new Employee(name, surname, age, job, address, number, education));
+                            garage.Employee = employee;
                             garage.UpdateVacancy(garage.Number_of_vacancy - 1);
                             folderService.SaveData(garage.Employee, FolderService.Folder.Employee);
-                            logger.Log(AppConstants.Alert.ADDED_NEW_EMPLOYEE_WITH_ID + garage.Employee[garage.Employee.Length - 1].id,LogLevel.Information);
+                            logger.Log(AppConstants.Alert.ADDED_NEW_EMPLOYEE_WITH_ID + garage.Employee[employee.Count-1].id,LogLevel.Information);
                         }
                         catch (Exception ex)
                         {
@@ -86,17 +82,17 @@ namespace Warehouse_infrastructure
         /// Update information about employee
         /// </summary>
         /// <param name="garage">object</param>
-        public Employee UpdateEmployeeInformation(Warehouse garage, Employee[] searchedEntities = null)
+        public Employee UpdateEmployeeInformation(Warehouse garage, List<Employee> searchedEntities = null)
         {
             Console.Write("Enter number of employee: ");
             int selectEmployee = validationService.TrySetNumber(Console.ReadLine(), "Number");
             Employee employeeForUpdate = null;
-            if (selectEmployee <= garage.Employee.Length && selectEmployee >= 1)
+            if (selectEmployee <= garage.Employee.Count && selectEmployee >= 1)
             {
-                if (searchedEntities != null && searchedEntities.Length > 0)
+                if (searchedEntities != null && searchedEntities.Count > 0)
                 {
                     Guid id = searchedEntities[selectEmployee - 1].id;
-                    for (int i = 0; i < garage.Employee.Length; i++)
+                    for (int i = 0; i < garage.Employee.Count; i++)
                     {
                         if (garage.Employee[i].id == id)
                         {
@@ -150,7 +146,7 @@ namespace Warehouse_infrastructure
         {
             if (validationService.ValidationEmployee(garage))
             {
-                SortEmployeeByAge<Employee>(garage.Employee);
+                garage.Employee.Sort();
                 int number = 1;
                 foreach (Employee employee in garage.Employee)
                 {
@@ -168,7 +164,7 @@ namespace Warehouse_infrastructure
         /// Find employee by 'Name' and 'Surname' in employee array
         /// </summary>
         /// <param name="garage">object</param>
-        public Employee[] SearchEmployeesByNameAndSurname(Warehouse garage)
+        public List<Employee> SearchEmployeesByNameAndSurname(Warehouse garage)
         {
             if (validationService.ValidationEmployee(garage))
             {
@@ -178,19 +174,19 @@ namespace Warehouse_infrastructure
                 string name = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Name));
                 Console.Write($"Enter '{nameof(Employee.Surname)}': ");
                 string surname = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
-                Employee[] searchedEntities = new Employee[0];
-                for (int i = 0; i < garage.Employee.Length; i++)
+                List<Employee> searchedEntities = new List<Employee>();
+                for (int i = 0; i < garage.Employee.Count; i++)
                 {
                     Employee employee = garage.Employee[i];
                     if (employee.Name == name && employee.Surname == surname)
                     {
-                        validationService.Resize(ref searchedEntities, 1);
+                        searchedEntities.Add(employee);
                         searchedEntities[number] = garage.Employee[i];
                         Console.WriteLine($"{number + 1}) {employee.ToString()}");
                         number++;
                     }
                 }
-                if (searchedEntities.Length == 0)
+                if (searchedEntities.Count == 0)
                 {
                     Console.WriteLine($"There is no employee with a name: {name}, surname: {surname}");
                     return null;
@@ -216,24 +212,8 @@ namespace Warehouse_infrastructure
                 string choice = Console.ReadLine();
                 if (int.TryParse(choice, out int intChoice))
                 {
-                    if (intChoice < garage.Employee.Length && intChoice >= 1)
-                    {
-                        int x;
-                        int index = intChoice-1;
-                        garage.Employee[index] = null;
-                        for (int i = 0; i < garage.Employee.Length; i++)
-                        {
-                            x = intChoice;
-                            intChoice = index;
-                            index = x;
-                        }
-                        validationService.CloneArray(garage.Employee);
-                        var arrayEmployee = garage.Employee;
-                        Array.Resize(ref arrayEmployee, garage.Employee.Length - 1);
-                        garage.Employee = arrayEmployee;
-                        SortEmployeeByAge<Employee>(garage.Employee);
-                        garage.UpdateVacancy(garage.Number_of_vacancy + 1);
-                    }
+                    garage.Employee.RemoveAt(intChoice - 1);
+                    garage.UpdateVacancy(garage.Number_of_vacancy + 1);
                 }
             }
             else
@@ -250,10 +230,7 @@ namespace Warehouse_infrastructure
         {
             if (validationService.ValidationEmployee(garage))
             {
-                var arrayEmployee = garage.Employee;
-                Array.Resize(ref arrayEmployee, garage.Employee.Length + 1);
-                garage.Employee = arrayEmployee;
-                garage.Employee[garage.Employee.Length - 1] = addedEmployee;
+                garage.Employee.Add(addedEmployee);
                 garage.UpdateVacancy(garage.Number_of_vacancy - 1);
             }
             else

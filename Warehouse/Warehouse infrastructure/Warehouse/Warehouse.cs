@@ -14,7 +14,8 @@ namespace Warehouse_infrastructure
         private string address;
         private string number;
         private int vacancy;
-        private Employee[] employee;
+        private List<Employee> employee;
+        private Dictionary<Guid, Message> mailBox;
         public string Title 
         {
             get { return title; }
@@ -35,10 +36,15 @@ namespace Warehouse_infrastructure
             get { return vacancy; }
             private set { vacancy = value; }
         }
-        public Employee[] Employee
+        public List<Employee> Employee
         {
             get { return employee; }
             set { employee = value; }
+        }
+        public Dictionary<Guid, Message> MailBox
+        {
+            get { return mailBox; }
+            set { mailBox = value; }
         }
         public Warehouse() { }
         public Warehouse(string title, string address, string number, int vacancy)

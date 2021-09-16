@@ -22,6 +22,7 @@ namespace Warehouse_infrastructure
         {
             public const string ENTER_YOUR_CHOICE = "Enter your choice: ";
             public const string RETURN_TO_MAIN_MENU = "Return to 'Main Menu'";
+            public const string RETURN = "Return";
         }
 
     }

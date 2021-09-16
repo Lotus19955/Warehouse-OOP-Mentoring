@@ -19,20 +19,25 @@ namespace WarehouseOOPMentoring
         private static Stopwatch clock = new Stopwatch();
         private static BinaryFormatter Formatter = new BinaryFormatter();
         private static Logger logger = new Logger();
-        private static FolderService folderService = new FolderService(); 
+        private static FolderService folderService = new FolderService();
+        private static MessageService messageService = new MessageService();
+        private static Dictionary<Guid, Guid> mailBoxForAll = new Dictionary<Guid, Guid>();
+        private static Dictionary<Guid, Guid> mailBoxForOne = new Dictionary<Guid, Guid>();
 
         private static void Main(string[] args)
         {
             try
             {
                 folderService.DownloadWarehouseData(ref garage, FolderService.Folder.Warehouse);
-                folderService.DownloadEmployeeData(garage, FolderService.Folder.Employee);
-                logger.Log(AppConstants.Alert.PROGRAM_IS_RUNNING,LogLevel.Information);
-                logger.Log(AppConstants.Alert.DATA_DOWNLOAD_COMPLITED, LogLevel.Information);
-                if (garage == null)
+                if(garage == null)
                 {
                     warehouseService.Create(ref garage);
                 }
+                folderService.DownloadMailData(garage.MailBox, FolderService.Folder.MailBoxForAll);
+                folderService.DownloadEmployeeData(garage, FolderService.Folder.Employee);
+                logger.Log(AppConstants.Alert.PROGRAM_IS_RUNNING,LogLevel.Information);
+                logger.Log(AppConstants.Alert.DATA_DOWNLOAD_COMPLITED, LogLevel.Information);
+                
                 Menu(garage);
                 Console.ReadLine();
             }
@@ -210,7 +215,7 @@ namespace WarehouseOOPMentoring
                     UpdateEmployeeMenu(garage);
                     break;
                 case 2:
-                    Employee[] searchedEntities = employeeService.SearchEmployeesByNameAndSurname(garage);
+                    List<Employee> searchedEntities = employeeService.SearchEmployeesByNameAndSurname(garage);
                     if (searchedEntities != null)
                     {
                         UpdateEmployeeInformationMenu(garage, searchedEntities);
@@ -238,7 +243,8 @@ namespace WarehouseOOPMentoring
             Console.WriteLine($"4 - Find {nameof(garage.Employee)} by '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}'");
             Console.WriteLine($"5 - Remove '{nameof(garage.Employee)}'");
             Console.WriteLine($"6 - Create new '{nameof(Employee)}' based on the created");
-            Console.WriteLine($"7 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
+            Console.WriteLine($"7 - Message 'Menu'");
+            Console.WriteLine($"8 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
             Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
@@ -271,9 +277,17 @@ namespace WarehouseOOPMentoring
                     Employee selectedEmployeeToClone = employeeService.UpdateEmployeeInformation(garage);
                     Employee clonedEmployee = (Employee)selectedEmployeeToClone.Clone();
                     employeeService.AddEmployee(garage, clonedEmployee);
-                    UpdateEmployeeInformationMenu(garage, new[] { clonedEmployee }, true);
+                    UpdateEmployeeInformationMenu(garage, new List<Employee>{ clonedEmployee }, true);
                     break;
                 case 7:
+                    if (validationService.ValidationEmployee(garage))
+                    {
+                        messageService.MessageMenu(garage);
+                    }
+                    else { Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE); }
+                    EmployeeMenu(garage);
+                    break;
+                case 8:
                     Menu(garage);
                     break;
                 default:
@@ -286,7 +300,7 @@ namespace WarehouseOOPMentoring
         /// Display to console 'Update employee information menu'
         /// </summary>
         /// <param name="garage">object</param>
-        public static void UpdateEmployeeInformationMenu(Warehouse garage, Employee[] searchedEntities = null, bool? isCloned = false)
+        public static void UpdateEmployeeInformationMenu(Warehouse garage, List<Employee> searchedEntities = null, bool? isCloned = false)
         {
             Employee employeeForUpdate = isCloned == true ?
                 searchedEntities[0] : employeeService.UpdateEmployeeInformation(garage, searchedEntities);

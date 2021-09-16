@@ -12,17 +12,20 @@ namespace Warehouse_infrastructure
 {
     public class FolderService
     {/// <summary>
-    /// Choose name of file to save data
-    /// </summary>
+     /// Choose name of file to save data
+     /// </summary>
         public enum Folder
         {
             Warehouse = 1,
-            Employee
+            Employee,
+            MailBoxForAll, 
+            MailBoxForOne
         }
         private static ValidationService validationService = new ValidationService();
         private static BinaryFormatter Formatter = new BinaryFormatter();
         private static Logger logger = new Logger();
-        string  savePath = @"D:\VS\Проекты\Warehouse-OOP-Mentoring\Store\";
+        private static WarehouseService warehouseService = new WarehouseService();
+        string savePath = @"E:\VS\Warehouse-OOP-Mentoring\Store\";
         /// <summary>
         /// Save data to folder
         /// </summary>
@@ -37,11 +40,11 @@ namespace Warehouse_infrastructure
                 {
                     Formatter.Serialize(fs, @objectForSave);
                 }
-                logger.Log(AppConstants.Alert.OBJECT_SAVED,LogLevel.Information);
+                logger.Log(AppConstants.Alert.OBJECT_SAVED, LogLevel.Information);
             }
             catch (Exception ex)
             {
-                logger.Log(ex.Message,LogLevel.Error);
+                logger.Log(ex.Message, LogLevel.Error);
             }
         }
         /// <summary>
@@ -62,7 +65,7 @@ namespace Warehouse_infrastructure
             }
             catch (Exception ex)
             {
-                logger.Log(ex.Message,LogLevel.Error);
+                logger.Log(ex.Message, LogLevel.Error);
             }
         }
         /// <summary>
@@ -72,13 +75,40 @@ namespace Warehouse_infrastructure
         /// <param name="downloadFolder">Choose from what folder you need to download</param>
         public void DownloadWarehouseData(ref Warehouse objectForSave, Folder downloadFolder)
         {
+            try
+            {
+                validationService.ValidationSavingPath(savePath);
+                using (FileStream fs = new FileStream(savePath + $"{downloadFolder}.txt", FileMode.OpenOrCreate))
+                {
+                    if (File.Exists(savePath + $"{downloadFolder}.txt") && fs.Length > 0)
+                    {
+                        objectForSave = (Warehouse)Formatter.Deserialize(fs);
+                        objectForSave = new Warehouse(objectForSave.Title, objectForSave.Address, objectForSave.Contact_Number, objectForSave.Number_of_vacancy);
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                if (objectForSave == null)
+                {
+                    warehouseService.Create(ref objectForSave);
+                }
+                DownloadWarehouseData(ref objectForSave, downloadFolder);
+            }
+        }
+        /// <summary>
+        /// Download data from folder
+        /// </summary>
+        /// <param name="objectForSave">Witch object you need to download</param>
+        /// <param name="downloadFolder">Choose from what folder you need to download</param>
+        public void DownloadMailData(Dictionary<Guid,Message> objectForSave, Folder downloadFolder)
+        {
             validationService.ValidationSavingPath(savePath);
             using (FileStream fs = new FileStream(savePath + $"{downloadFolder}.txt", FileMode.OpenOrCreate))
             {
                 if (File.Exists(savePath + $"{downloadFolder}.txt") && fs.Length > 0)
                 {
-                    objectForSave = (Warehouse)Formatter.Deserialize(fs);
-                    objectForSave = new Warehouse(objectForSave.Title, objectForSave.Address, objectForSave.Contact_Number, objectForSave.Number_of_vacancy);
+                    objectForSave = (Dictionary<Guid,Message>)Formatter.Deserialize(fs);
                 }
             }
         }
@@ -92,16 +122,15 @@ namespace Warehouse_infrastructure
             validationService.ValidationSavingPath(savePath);
             if (!validationService.ValidationEmployee(objectForSave))
             {
-                objectForSave.Employee = new Employee[0];
+                objectForSave.Employee = new List<Employee>();
             }
             using (FileStream fs = new FileStream(savePath + $"{downloadFolder}.txt", FileMode.OpenOrCreate))
             if (File.Exists(savePath + $"{downloadFolder}.txt") && fs.Length > 0)
             {
-                Employee[] savedEmployee = (Employee[])Formatter.Deserialize(fs);
+                List<Employee> savedEmployee = (List<Employee>)Formatter.Deserialize(fs);
                 foreach (Employee p in savedEmployee)
                 {
-                    validationService.Resize(objectForSave, 1);
-                    objectForSave.Employee[objectForSave.Employee.Length - 1] = new Employee(p.Name, p.Surname, p.Age, p.Job, p.Address, p.Contact_Number, p.Education);
+                    objectForSave.Employee.Add(new Employee(p.Name, p.Surname, p.Age, p.Job, p.Address, p.Contact_Number, p.Education));
                     objectForSave.UpdateVacancy(objectForSave.Number_of_vacancy - 1);
                 }
             }

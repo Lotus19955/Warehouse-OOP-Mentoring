@@ -90,6 +90,8 @@
     <Compile Include="Employee\Employee.cs" />
     <Compile Include="Warehouse\Warehouse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Work with Employee\Message.cs" />
+    <Compile Include="Work with Employee\MessageService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">
