@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warehouse_infrastructure
 {
+    [Serializable]
     public class Message : IHasId
     {
         private string sender;
@@ -32,6 +33,7 @@ namespace Warehouse_infrastructure
             get { return body; }
             set { body = value; }
         }
+        public Message() { }
         public Message (string sender, List<Employee> receiver, string body)
         {
             this.Sender = sender;

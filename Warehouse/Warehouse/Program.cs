@@ -27,21 +27,25 @@ namespace WarehouseOOPMentoring
         {
             try
             {
-                folderService.DownloadWarehouseData(ref garage, FolderService.Folder.Warehouse);
+                folderService.DownloadWarehouseData(ref garage, nameof(Warehouse));
                 if (garage == null)
                 {
                     warehouseService.Create(ref garage);
                 }
-                folderService.DownloadEmployeeData(garage, FolderService.Folder.Employee);
+                folderService.DownloadEmployeeData(garage, nameof(Employee));
+                folderService.DownloadMailData(garage, nameof(garage.MailBox), nameof(garage.MailBox));
                 logger.Log(AppConstants.Alert.PROGRAM_IS_RUNNING, LogLevel.Information);
                 logger.Log(AppConstants.Alert.DATA_DOWNLOAD_COMPLITED, LogLevel.Information);
-
-                Menu(garage);
-                Console.ReadLine();
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 logger.Log(ex.Message, LogLevel.Error);
+            }
+            finally
+            {
+                Menu(garage);
+                Console.ReadLine();
             }
         }
         /// <summary>

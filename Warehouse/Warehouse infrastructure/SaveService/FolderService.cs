@@ -14,12 +14,6 @@ namespace Warehouse_infrastructure
     {/// <summary>
      /// Choose name of file to save data
      /// </summary>
-        public enum Folder
-        {
-            Warehouse = 1,
-            Employee,
-            MailBox, 
-        }
         private static ValidationService validationService = new ValidationService();
         private static BinaryFormatter Formatter = new BinaryFormatter();
         private static Logger logger = new Logger();
@@ -30,20 +24,28 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="objectForSave">Witch object you need to save</param>
         /// <param name="folderForSave">Choose to what folder you need to save</param>
-        public void SaveData<T>(T objectForSave, Folder folderForSave , string folder = null)
+        public void SaveData<T>(T objectForSave, string folderForSave, string folder = null)
         {
-            if (folder != null)
-            {
-                savePath = savePath + $@"{folder}\";
-            }
-            validationService.ValidationSavingPath(savePath);
             try
             {
-                using (FileStream fs = new FileStream(savePath + $"{folderForSave}.txt", FileMode.OpenOrCreate))
+                if (folder != null)
                 {
-                    Formatter.Serialize(fs, @objectForSave);
+                validationService.ValidationSavingPath(savePath + folder);
+                    using (FileStream fs = new FileStream(savePath + $@"{folder}\" + $"{folderForSave}.txt", FileMode.OpenOrCreate))
+                    {
+                        Formatter.Serialize(fs, @objectForSave);
+                    }
+                    logger.Log(AppConstants.Alert.OBJECT_SAVED, LogLevel.Information);
                 }
-                logger.Log(AppConstants.Alert.OBJECT_SAVED, LogLevel.Information);
+                else 
+                {
+                    validationService.ValidationSavingPath(savePath);
+                    using (FileStream fs = new FileStream(savePath + $"{folderForSave}.txt", FileMode.OpenOrCreate))
+                    {
+                        Formatter.Serialize(fs, @objectForSave);
+                    }
+                    logger.Log(AppConstants.Alert.OBJECT_SAVED, LogLevel.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -55,16 +57,29 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="objectForSave">Witch object you need to save</param>
         /// <param name="folderForSave">Choose to what folder you need to save</param>
-        public void SaveData<T>(T[] objectForSave, Folder folderForSave)
+        public void SaveData<T>(T[] objectForSave, string folderForSave, string folder = null)
         {
             validationService.ValidationSavingPath(savePath);
             try
             {
-                using (FileStream fs = new FileStream(savePath + $"{folderForSave}.txt", FileMode.OpenOrCreate))
+                if (folder != null)
                 {
-                    Formatter.Serialize(fs, objectForSave);
+                    validationService.ValidationSavingPath(savePath + folder);
+                    using (FileStream fs = new FileStream(savePath + $@"{folder}\" + $"{folderForSave}.txt", FileMode.OpenOrCreate))
+                    {
+                        Formatter.Serialize(fs, @objectForSave);
+                    }
+                    logger.Log(AppConstants.Alert.OBJECT_SAVED, LogLevel.Information);
                 }
-                logger.Log(AppConstants.Alert.OBJECT_SAVED, LogLevel.Information);
+                else
+                {
+                    validationService.ValidationSavingPath(savePath);
+                    using (FileStream fs = new FileStream(savePath + $"{folderForSave}.txt", FileMode.OpenOrCreate))
+                    {
+                        Formatter.Serialize(fs, @objectForSave);
+                    }
+                    logger.Log(AppConstants.Alert.OBJECT_SAVED, LogLevel.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -76,7 +91,7 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="objectForSave">Witch object you need to download</param>
         /// <param name="downloadFolder">Choose from what folder you need to download</param>
-        public void DownloadWarehouseData(ref Warehouse objectForSave, Folder downloadFolder)
+        public void DownloadWarehouseData(ref Warehouse objectForSave, string downloadFolder)
         {
             try
             {
@@ -104,14 +119,20 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="objectForSave">Witch object you need to download</param>
         /// <param name="downloadFolder">Choose from what folder you need to download</param>
-        public void DownloadMailData(Dictionary<Guid,Message> objectForSave, Folder downloadFolder)
+        public void DownloadMailData(Warehouse objectForSave, string downloadFolder, string folder = null)
         {
-            validationService.ValidationSavingPath(savePath);
-            using (FileStream fs = new FileStream(savePath + $"{downloadFolder}.txt", FileMode.OpenOrCreate))
+            string[] files = Directory.GetFiles(savePath + folder);
+            for (int i = 0; i < files.Length; i++)
             {
-                if (File.Exists(savePath + $"{downloadFolder}.txt") && fs.Length > 0)
+                if (File.Exists(files[i]))
                 {
-                    objectForSave = (Dictionary<Guid,Message>)Formatter.Deserialize(fs);
+                    using (FileStream fs = new FileStream(files[i], FileMode.OpenOrCreate))
+                    {
+                        Message savedMessage = (Message)Formatter.Deserialize(fs);
+                        List<Message> listSavedMessage = new List<Message>();
+                        listSavedMessage.Add(savedMessage);
+                        objectForSave.MailBox.Add($"{savedMessage.id}", listSavedMessage);
+                    }
                 }
             }
         }
@@ -120,9 +141,8 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="objectForSave">Witch object you need to download</param>
         /// <param name="downloadFolder">Choose from what folder you need to download</param>
-        public void DownloadEmployeeData(Warehouse objectForSave, Folder downloadFolder)
+        public void DownloadEmployeeData(Warehouse objectForSave, string downloadFolder)
         {
-            validationService.ValidationSavingPath(savePath);
             if (!validationService.ValidationEmployee(objectForSave))
             {
                 objectForSave.Employee = new List<Employee>();

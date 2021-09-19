@@ -18,7 +18,7 @@ namespace Warehouse_infrastructure
             List<Message> listMessage = new List<Message>();
             listMessage.Add(message);
             garage.MailBox.Add($"{message.id}", listMessage);
-            folderService.SaveData(garage.MailBox,FolderService.Folder.MailBox, nameof(garage.MailBox));
+            folderService.SaveData(message, $"{message.id}", nameof(garage.MailBox));
             Console.WriteLine("Message sent!");
         }
         private Message DataForMail (Warehouse garage)
@@ -68,9 +68,19 @@ namespace Warehouse_infrastructure
         {
             if(mailBox != null)
             {
-                foreach (var mail in mailBox)
+                for (int i = 0; i < mailBox.Count - 1; i++)
                 {
-                    Console.WriteLine(mail.Key + " - " + mail.Value);
+                    foreach (List <Message> mail in mailBox.Values)
+                    {
+                        Console.WriteLine(nameof(Message.Sender) + ":" + $" {mail[i].Sender}") ;
+                        Console.Write(nameof(Message.Receiver) + ":");
+                        for (int y = 0; y < mail[i].Receiver.Count; y++)
+                        {
+                            Console.Write($" {mail[i].Receiver[y].Name},");
+                        }
+                        Console.WriteLine("\n" + nameof(Message.Body) + ":" + $" {mail[i].Body}");
+                        Console.WriteLine();
+                    }
                 }
             }
             else {Console.WriteLine($"{mailBox} is empty!");}

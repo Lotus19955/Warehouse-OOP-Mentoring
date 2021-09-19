@@ -56,7 +56,7 @@ namespace Warehouse_infrastructure
                             employee.Add(new Employee(name, surname, age, job, address, number, education));
                             garage.Employee = employee;
                             garage.UpdateVacancy(garage.Number_of_vacancy - 1);
-                            folderService.SaveData(garage.Employee, FolderService.Folder.Employee);
+                            folderService.SaveData(garage.Employee, nameof(Employee));
                             logger.Log(AppConstants.Alert.ADDED_NEW_EMPLOYEE_WITH_ID + garage.Employee[employee.Count-1].id,LogLevel.Information);
                         }
                         catch (Exception ex)
@@ -112,7 +112,7 @@ namespace Warehouse_infrastructure
                 Console.WriteLine("'Number' is incorrect value");
                 UpdateEmployeeInformation(garage, searchedEntities);
             }
-            folderService.SaveData(garage.Employee, FolderService.Folder.Employee);
+            folderService.SaveData(garage.Employee, nameof(Employee));
             return employeeForUpdate;
         }
         /// <summary>
@@ -220,7 +220,7 @@ namespace Warehouse_infrastructure
             {
                 Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
             }
-            folderService.SaveData(garage.Employee, FolderService.Folder.Employee);
+            folderService.SaveData(garage.Employee, nameof(Employee));
         }
         /// <summary>
         /// Add employee to array

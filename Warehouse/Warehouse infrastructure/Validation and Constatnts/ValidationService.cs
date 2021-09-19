@@ -61,7 +61,8 @@ namespace Warehouse_infrastructure
             {
                 Directory.CreateDirectory(savePath);
             }
-        }/// <summary>
+        }
+        /// <summary>
         /// Clone Array, put null element to last slot
         /// </summary>
         /// <param name="array">Take any array</param>

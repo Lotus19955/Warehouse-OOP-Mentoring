@@ -40,7 +40,7 @@ namespace Warehouse_infrastructure
                 int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Number_of_vacancy));
                 Dictionary<string, List<Message>> mailBox = new Dictionary<string, List<Message>>();
                 garage = new Warehouse(title, address, number, vacancy, mailBox);
-                folderService.SaveData(garage,FolderService.Folder.Warehouse);
+                folderService.SaveData(garage, nameof(Warehouse));
                 logger.Log(AppConstants.Alert.NEW_OBJECT_WAREHOUSE_CREATED, LogLevel.Information);
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace Warehouse_infrastructure
         {
             Console.Write("Enter new 'Title': ");
             garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
-            folderService.SaveData(garage, FolderService.Folder.Warehouse);
+            folderService.SaveData(garage, nameof(Warehouse));
             return garage;
         }
         /// <summary>
@@ -66,7 +66,7 @@ namespace Warehouse_infrastructure
         {
             Console.Write("Enter new 'Address': ");
             garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
-            folderService.SaveData(garage, FolderService.Folder.Warehouse);
+            folderService.SaveData(garage, nameof(Warehouse));
             return garage;
         }
         /// <summary>
@@ -76,7 +76,7 @@ namespace Warehouse_infrastructure
         {
             Console.Write("Enter new 'Contact number': ");
             garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
-            folderService.SaveData(garage, FolderService.Folder.Warehouse);
+            folderService.SaveData(garage, nameof(Warehouse));
             return garage;
         }
         /// <summary>
@@ -87,7 +87,7 @@ namespace Warehouse_infrastructure
             Console.Write("Enter new number of free 'Vacancy': ");
             int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
             garage.UpdateVacancy(vacancy);
-            folderService.SaveData(garage, FolderService.Folder.Warehouse);
+            folderService.SaveData(garage, nameof(Warehouse));
             return garage;
         }
         /// <summary>
