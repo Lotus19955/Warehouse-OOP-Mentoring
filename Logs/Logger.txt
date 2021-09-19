@@ -1,84 +1,44 @@
 
-Log Entry : 12.09.2021 07:59:27
+Log Entry : 18.09.2021 21:28:29
 Information: Object saved
 ----------------------------------
 
-Log Entry : 12.09.2021 07:59:27
+Log Entry : 18.09.2021 21:28:29
 Information: New object 'Warehouse' created
 ----------------------------------
 
-Log Entry : 12.09.2021 07:59:41
+Log Entry : 18.09.2021 21:28:29
 Information: Program is running
 ----------------------------------
 
-Log Entry : 12.09.2021 07:59:42
+Log Entry : 18.09.2021 21:28:29
 Information: Data download cpmplited
 ----------------------------------
 
-Log Entry : 12.09.2021 08:01:52
+Log Entry : 18.09.2021 21:28:37
 Information: Object saved
 ----------------------------------
 
-Log Entry : 12.09.2021 08:01:52
-Information: Added new employee with id: 3fbfbfb4-8720-4d97-8d61-6dfe5e9b3c14
+Log Entry : 18.09.2021 21:28:37
+Information: Added new employee with id: 50e15548-a4b1-4884-92a1-e265cc458c69
 ----------------------------------
 
-Log Entry : 12.09.2021 08:02:40
+Log Entry : 18.09.2021 21:28:39
 Information: Object saved
 ----------------------------------
 
-Log Entry : 12.09.2021 08:02:40
-Information: Added new employee with id: bdd13a05-4362-4e50-9aa8-914850e1901b
+Log Entry : 18.09.2021 21:28:39
+Information: Added new employee with id: ad493501-0692-47d8-a3c4-b6d4eb7ba550
 ----------------------------------
 
-Log Entry : 12.09.2021 08:03:39
+Log Entry : 18.09.2021 21:28:42
 Information: Object saved
 ----------------------------------
 
-Log Entry : 12.09.2021 08:03:39
-Information: Added new employee with id: 4cb84f50-debe-4126-9fff-23d6bc5c56ad
+Log Entry : 18.09.2021 21:28:42
+Information: Added new employee with id: be89c0bd-e9a3-42c7-b440-2d5d069b8709
 ----------------------------------
 
-Log Entry : 12.09.2021 08:04:13
-Information: Object saved
-----------------------------------
-
-Log Entry : 12.09.2021 08:04:13
-Information: Added new employee with id: 9dd4e47a-b92e-4bc5-a2d5-30c43cb20dde
-----------------------------------
-
-Log Entry : 12.09.2021 08:04:35
-Information: Object saved
-----------------------------------
-
-Log Entry : 12.09.2021 08:05:46
-Information: Object saved
-----------------------------------
-
-Log Entry : 12.09.2021 08:06:49
-Information: Program is running
-----------------------------------
-
-Log Entry : 12.09.2021 08:06:49
-Information: Data download cpmplited
-----------------------------------
-
-Log Entry : 12.09.2021 10:42:29
-Information: Program is running
-----------------------------------
-
-Log Entry : 12.09.2021 10:42:29
-Information: Data download cpmplited
-----------------------------------
-
-Log Entry : 12.09.2021 12:27:20
-Information: Program is running
-----------------------------------
-
-Log Entry : 12.09.2021 12:27:20
-Information: Data download cpmplited
-----------------------------------
-
-Log Entry : 12.09.2021 12:27:41
-Information: Object saved
+Log Entry : 18.09.2021 21:29:14
+Error: Тип "Warehouse_infrastructure.Message" в сборке "Warehouse infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" не помечен как сериализуемый.
 ----------------------------------

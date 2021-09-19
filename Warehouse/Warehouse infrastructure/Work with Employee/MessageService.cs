@@ -10,99 +10,70 @@ namespace Warehouse_infrastructure
     {
         private static ValidationService validationService = new ValidationService();
         private static EmployeeService employeeService = new EmployeeService();
-        private static Message message = new Message();
-        private static Message messageForAll = new Message();
-        //private static Dictionary<Guid, List<Employee>> mailBoxForAll = new Dictionary<Guid, List<Employee>>();
-        //private static Dictionary<Guid, Guid> mailBoxForOne = new Dictionary<Guid, Guid>();
         private static FolderService folderService = new FolderService();
-        public void MessageMenu(Warehouse garage)
+        
+        public void MailToAll(Warehouse garage)
         {
-            Console.WriteLine("\n\t Massage menu");
-            Console.WriteLine($"1 - Send mail to all Employees");
-            Console.WriteLine($"2 - Send mail to Employee");
-            Console.WriteLine($"3 - Show sent message for all");
-            Console.WriteLine($"4 - Show sent message for each employee");
-            Console.WriteLine($"5 - {AppConstants.Command.RETURN}");
-            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
-            string choise = Console.ReadLine();
-            Console.WriteLine();
-            int.TryParse(choise, out int number);
-            Console.Clear();
-            switch (number)
-            {
-                case 1:
-                    MailToAll(garage);
-                    break;
-                case 2:
-                    //MailToOne(garage);
-                    break;
-                case 3:
-                    ShowMail(messageForAll);
-                    break;
-                case 4:
-                  //  ShowMail(mailBoxForOne);
-                    break;
-                case 5:
-                    break;
-                default:
-                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
-                    break;
-            }
+            Message message = DataForMail(garage);
+            List<Message> listMessage = new List<Message>();
+            listMessage.Add(message);
+            garage.MailBox.Add($"{message.id}", listMessage);
+            folderService.SaveData(garage.MailBox,FolderService.Folder.MailBox, nameof(garage.MailBox));
+            Console.WriteLine("Message sent!");
         }
-        private static void MailToAll(Warehouse garage)
+        private Message DataForMail (Warehouse garage)
         {
-            messageForAll = DataForMailForAll(garage);
-            Console.WriteLine("Message sent to all employee!");
-            garage.MailBox.Add(messageForAll.id, messageForAll);
-            folderService.SaveData<Dictionary<Guid, Message>>(garage.MailBox,FolderService.Folder.MailBoxForAll);
-        }
-        //private static void MailToOne(Warehouse garage)
-        //{
-        //    message = DataForMailForOne(garage, message);
-        //    for (int i = 0; i < message.Receiver.Count; i++)
-        //    {
-        //        mailBoxForOne.Add(message.Receiver[i].id, message.id);
-        //    }
-        //    Console.WriteLine($"Message sent to {message.ToString()}");
-        //}
-        private static Message DataForMailForAll (Warehouse garage)
-        {
+            List<Employee> employee = new List<Employee>();
             Console.Write($"Enter '{nameof(Message.Sender)}' name: ");
             string sender = validationService.TrySetValue(Console.ReadLine(), nameof(Message.Sender));
+            Console.WriteLine();
+            employeeService.DisplayWarehouseEmployee(garage);
+            Console.WriteLine($"{garage.Employee.Count + 1}) All employees");
+            Console.WriteLine();
+            Console.WriteLine($"{garage.Employee.Count + 2}) Return");
+            Console.Write($"Choose '{nameof(Message.Receiver)}' (enter number): ");
+            int choice = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Employee));
+            if (choice > 0 && choice <= garage.Employee.Count + 1)
+            {
+                if (choice >= 1 && choice < garage.Employee.Count)
+                {
+                    employee.Add(garage.Employee[choice - 1]);
+                }
+                if (choice == garage.Employee.Count + 1)
+                {
+                    employee.AddRange(garage.Employee);
+                }
+            }
+            else 
+            {
+                while (choice <= 0 | choice > garage.Employee.Count + 1)
+                { 
+                    Console.WriteLine("Incorrect value");
+                    Console.Write($"Choose '{nameof(Message.Receiver)}' (enter number): ");
+                    choice = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Employee));
+                    if (choice == garage.Employee.Count + 2)
+                    {
+                        MailToAll(garage);
+                    }
+                }
+            }
+            var receiver = employee;
             Console.Write($"Enter 'Mail' text: ");
             string body = validationService.TrySetValue(Console.ReadLine(), nameof(Message.Body));
             Console.Clear();
-            messageForAll = new Message(sender, garage.Employee, body);
-            return messageForAll;
+            Message message = new Message(sender, receiver, body);
+            return message;
         }
-        //private static Message DataForMailForOne(Warehouse garage, Message messageForOne)
-        //{
-        //    employeeService.DisplayWarehouseEmployee(garage);
-        //    Console.Write("Enter number which employee you send mail: ");
-        //    string choice = Console.ReadLine();
-        //    if (int.TryParse(choice, out int intChoice))
-        //    {
-        //        messageForOne.Receiver.Add(garage.Employee[intChoice - 1]);
-        //    }
-        //    Console.WriteLine();
-        //    Console.Write($"Enter '{nameof(Message.Sender)}' name: ");
-        //    string sender = validationService.TrySetValue(Console.ReadLine(), nameof(Message.Sender));
-        //    Console.WriteLine();
-        //    Console.Write($"Enter 'Mail' text: ");
-        //    string body = validationService.TrySetValue(Console.ReadLine(), nameof(Message.Body));
-        //    Console.Clear();
-        //    messageForOne = new Message(sender,messageForOne.Receiver,body);
-        //    return messageForOne;
-        //}
-        private static void ShowMail (Message message)
+        public void ShowMail (Dictionary<string,List<Message>> mailBox)
         {
-            Console.WriteLine($"{nameof(message.Sender)}: {message.Sender}");
-            Console.WriteLine($"{nameof(message.Receiver)}: ");
-            foreach (Employee employee in message.Receiver)
+            if(mailBox != null)
             {
-                Console.WriteLine($"\t{nameof(employee.Name)}: {employee.Name}  {nameof(employee.Surname)}: {employee.Surname}");
+                foreach (var mail in mailBox)
+                {
+                    Console.WriteLine(mail.Key + " - " + mail.Value);
+                }
             }
-            Console.WriteLine($"{nameof(message.Body)}: {message.Body}");
+            else {Console.WriteLine($"{mailBox} is empty!");}
         }
     }
 }

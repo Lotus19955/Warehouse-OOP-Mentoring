@@ -9,7 +9,7 @@ namespace Warehouse_infrastructure
     public class Message : IHasId
     {
         private string sender;
-        private List<Employee> receiver;
+        private List<Employee> receivers;
         private string body;
         private Guid Id;
         public Guid id
@@ -24,16 +24,15 @@ namespace Warehouse_infrastructure
         }
         public List<Employee> Receiver
         {
-            get { return receiver; }
-            set { receiver = value; }
+            get { return receivers; }
+            set { receivers = value; }
         }
         public string Body
         {
             get { return body; }
             set { body = value; }
         }
-        public Message() { }
-        public Message(string sender, List<Employee> receiver, string body)
+        public Message (string sender, List<Employee> receiver, string body)
         {
             this.Sender = sender;
             this.Receiver = receiver;

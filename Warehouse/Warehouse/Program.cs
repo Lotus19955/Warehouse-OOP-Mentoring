@@ -21,29 +21,27 @@ namespace WarehouseOOPMentoring
         private static Logger logger = new Logger();
         private static FolderService folderService = new FolderService();
         private static MessageService messageService = new MessageService();
-        private static Dictionary<Guid, Guid> mailBoxForAll = new Dictionary<Guid, Guid>();
-        private static Dictionary<Guid, Guid> mailBoxForOne = new Dictionary<Guid, Guid>();
+        
 
         private static void Main(string[] args)
         {
             try
             {
                 folderService.DownloadWarehouseData(ref garage, FolderService.Folder.Warehouse);
-                if(garage == null)
+                if (garage == null)
                 {
                     warehouseService.Create(ref garage);
                 }
-                folderService.DownloadMailData(garage.MailBox, FolderService.Folder.MailBoxForAll);
                 folderService.DownloadEmployeeData(garage, FolderService.Folder.Employee);
-                logger.Log(AppConstants.Alert.PROGRAM_IS_RUNNING,LogLevel.Information);
+                logger.Log(AppConstants.Alert.PROGRAM_IS_RUNNING, LogLevel.Information);
                 logger.Log(AppConstants.Alert.DATA_DOWNLOAD_COMPLITED, LogLevel.Information);
-                
+
                 Menu(garage);
                 Console.ReadLine();
             }
             catch (Exception ex)
             {
-                logger.Log(ex.Message,LogLevel.Error);
+                logger.Log(ex.Message, LogLevel.Error);
             }
         }
         /// <summary>
@@ -277,12 +275,12 @@ namespace WarehouseOOPMentoring
                     Employee selectedEmployeeToClone = employeeService.UpdateEmployeeInformation(garage);
                     Employee clonedEmployee = (Employee)selectedEmployeeToClone.Clone();
                     employeeService.AddEmployee(garage, clonedEmployee);
-                    UpdateEmployeeInformationMenu(garage, new List<Employee>{ clonedEmployee }, true);
+                    UpdateEmployeeInformationMenu(garage, new List<Employee> { clonedEmployee }, true);
                     break;
                 case 7:
                     if (validationService.ValidationEmployee(garage))
                     {
-                        messageService.MessageMenu(garage);
+                        MailMenu(garage);
                     }
                     else { Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE); }
                     EmployeeMenu(garage);
@@ -357,6 +355,36 @@ namespace WarehouseOOPMentoring
                         break;
                 }
 
+            }
+        }
+        /// <summary>
+        /// Display to console 'Mail menu'
+        /// </summary>
+        /// <param name="garage">object</param>
+        public static void MailMenu(Warehouse garage)
+        {
+            Console.WriteLine("\n\t Massage menu");
+            Console.WriteLine($"1 - Send mail");
+            Console.WriteLine($"2 - Show sent message");
+            Console.WriteLine($"3 - {AppConstants.Command.RETURN}");
+            Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
+            string choise = Console.ReadLine();
+            Console.WriteLine();
+            int.TryParse(choise, out int number);
+            Console.Clear();
+            switch (number)
+            {
+                case 1:
+                    messageService.MailToAll(garage);
+                    break;
+                case 2:
+                    messageService.ShowMail(garage.MailBox);
+                    break;
+                case 3:
+                    break;
+                default:
+                    Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
+                    break;
             }
         }
         /// <summary>

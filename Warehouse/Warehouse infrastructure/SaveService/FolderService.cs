@@ -18,21 +18,24 @@ namespace Warehouse_infrastructure
         {
             Warehouse = 1,
             Employee,
-            MailBoxForAll, 
-            MailBoxForOne
+            MailBox, 
         }
         private static ValidationService validationService = new ValidationService();
         private static BinaryFormatter Formatter = new BinaryFormatter();
         private static Logger logger = new Logger();
         private static WarehouseService warehouseService = new WarehouseService();
-        string savePath = @"E:\VS\Warehouse-OOP-Mentoring\Store\";
+        string savePath = @"D:\VS\Проекты\Warehouse-OOP-Mentoring\Store\";
         /// <summary>
         /// Save data to folder
         /// </summary>
         /// <param name="objectForSave">Witch object you need to save</param>
         /// <param name="folderForSave">Choose to what folder you need to save</param>
-        public void SaveData<T>(T objectForSave, Folder folderForSave)
+        public void SaveData<T>(T objectForSave, Folder folderForSave , string folder = null)
         {
+            if (folder != null)
+            {
+                savePath = savePath + $@"{folder}\";
+            }
             validationService.ValidationSavingPath(savePath);
             try
             {
@@ -83,7 +86,7 @@ namespace Warehouse_infrastructure
                     if (File.Exists(savePath + $"{downloadFolder}.txt") && fs.Length > 0)
                     {
                         objectForSave = (Warehouse)Formatter.Deserialize(fs);
-                        objectForSave = new Warehouse(objectForSave.Title, objectForSave.Address, objectForSave.Contact_Number, objectForSave.Number_of_vacancy);
+                        objectForSave = new Warehouse(objectForSave.Title, objectForSave.Address, objectForSave.Contact_Number, objectForSave.Number_of_vacancy, objectForSave.MailBox);
                     }
                 }
             }

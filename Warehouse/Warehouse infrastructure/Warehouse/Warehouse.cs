@@ -15,7 +15,7 @@ namespace Warehouse_infrastructure
         private string number;
         private int vacancy;
         private List<Employee> employee;
-        private Dictionary<Guid, Message> mailBox;
+        private Dictionary<string, List<Message>> mailBox;
         public string Title 
         {
             get { return title; }
@@ -41,18 +41,19 @@ namespace Warehouse_infrastructure
             get { return employee; }
             set { employee = value; }
         }
-        public Dictionary<Guid, Message> MailBox
+        public Dictionary<string, List<Message>> MailBox
         {
             get { return mailBox; }
             set { mailBox = value; }
         }
         public Warehouse() { }
-        public Warehouse(string title, string address, string number, int vacancy)
+        public Warehouse(string title, string address, string number, int vacancy,Dictionary<string, List<Message>> mailBox)
         {
             this.Title = title;
             this.Address = address;
             this.Contact_Number = number;
             this.Number_of_vacancy = vacancy;
+            this.mailBox = mailBox;
         }
         public void UpdateVacancy(int number)
         {

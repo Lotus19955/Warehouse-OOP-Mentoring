@@ -38,7 +38,8 @@ namespace Warehouse_infrastructure
                 string number = validationService.TrySetValue(Console.ReadLine(), nameof(Warehouse.Contact_Number));
                 Console.Write($"Enter  '{nameof(Warehouse.Number_of_vacancy)}': ");
                 int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(Warehouse.Number_of_vacancy));
-                garage = new Warehouse(title, address, number, vacancy);
+                Dictionary<string, List<Message>> mailBox = new Dictionary<string, List<Message>>();
+                garage = new Warehouse(title, address, number, vacancy, mailBox);
                 folderService.SaveData(garage,FolderService.Folder.Warehouse);
                 logger.Log(AppConstants.Alert.NEW_OBJECT_WAREHOUSE_CREATED, LogLevel.Information);
             }

@@ -45,7 +45,7 @@ namespace Warehouse_infrastructure
         }
         public Logger()
         {
-            this.CurrentDirectory = @"E:\VS\Warehouse-OOP-Mentoring\Logs\";
+            this.CurrentDirectory = @"D:\VS\Проекты\Warehouse-OOP-Mentoring\Logs\";
             this.FileName = "Logger.txt";
             this.FilePath = this.CurrentDirectory + this.FileName;
         }
