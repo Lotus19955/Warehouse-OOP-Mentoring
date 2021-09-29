@@ -25,7 +25,7 @@ namespace Warehouse_infrastructure
         /// Create you warehouse objects
         /// </summary>
         /// <returns>object</returns>
-        public Warehouse Create(ref Warehouse garage)
+        public Warehouse Create(Warehouse garage)
         {
             try
             {
@@ -52,43 +52,39 @@ namespace Warehouse_infrastructure
         /// <summary>
         /// Update title
         /// </summary>
-        public Warehouse UpdateTitle(ref Warehouse garage)
+        public void UpdateTitle(Warehouse garage)
         {
             Console.Write("Enter new 'Title': ");
             garage.Title = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Title));
             folderService.SaveData(garage, nameof(Warehouse));
-            return garage;
         }
         /// <summary>
         /// Update address
         /// </summary>
-        public Warehouse UpdateAddress(ref Warehouse garage)
+        public void UpdateAddress(Warehouse garage)
         {
             Console.Write("Enter new 'Address': ");
             garage.Address = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Address));
             folderService.SaveData(garage, nameof(Warehouse));
-            return garage;
         }
         /// <summary>
         /// Update number
         /// </summary>
-        public Warehouse UpdateNumber(ref Warehouse garage)
+        public void UpdateNumber(Warehouse garage)
         {
             Console.Write("Enter new 'Contact number': ");
             garage.Contact_Number = validationService.TrySetValue(Console.ReadLine(), nameof(garage.Contact_Number));
             folderService.SaveData(garage, nameof(Warehouse));
-            return garage;
         }
         /// <summary>
         /// Update vacancy
         /// </summary>
-        public Warehouse UpdateVacancy(ref Warehouse garage)
+        public void UpdateVacancy(Warehouse garage)
         {
             Console.Write("Enter new number of free 'Vacancy': ");
             int vacancy = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Number_of_vacancy));
             garage.UpdateVacancy(vacancy);
             folderService.SaveData(garage, nameof(Warehouse));
-            return garage;
         }
         /// <summary>
         /// Display to console information about object

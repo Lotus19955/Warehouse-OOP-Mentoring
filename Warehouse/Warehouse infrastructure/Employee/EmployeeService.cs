@@ -18,7 +18,7 @@ namespace Warehouse_infrastructure
         /// Create you employee object
         /// </summary>
         /// <returns>object</returns>
-        public void Create(Warehouse garage)
+        public void CreateEmployee(Warehouse garage)
         {
             Console.WriteLine($"Number of free vacancy: {garage.Number_of_vacancy}");
             Console.Write("How many employees do you want to add: ");
@@ -53,8 +53,7 @@ namespace Warehouse_infrastructure
                             Console.Write($"Enter '{nameof(Employee.Education)}' of employee: ");
                             string education = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Education));
 
-                            employee.Add(new Employee(name, surname, age, job, address, number, education));
-                            garage.Employee = employee;
+                            garage.Employee.Add(new Employee(name, surname, age, job, address, number, education));
                             garage.UpdateVacancy(garage.Number_of_vacancy - 1);
                             folderService.SaveData(garage.Employee, nameof(Employee));
                             logger.Log(AppConstants.Alert.ADDED_NEW_EMPLOYEE_WITH_ID + garage.Employee[employee.Count-1].id,LogLevel.Information);
@@ -120,7 +119,7 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <typeparam name="T">where T : Employee, IComparable</typeparam>
         /// <param name="array">Array tipe</param>
-        public void SortEmployeeByAge<T>(T[] array) where T : IComparable
+        public void Sort<T>(T[] array) where T : IComparable
         {
             for (int i = 0; i < array.Length; i++)
             {
@@ -142,15 +141,15 @@ namespace Warehouse_infrastructure
         /// Display to console information about employees
         /// </summary>
         /// <param name="garage">object</param>
-        public void DisplayWarehouseEmployee(Warehouse garage)
+        public void DisplayWarehouseEmployee(List<Employee> employee)
         {
-            if (validationService.ValidationEmployee(garage))
+            if (validationService.ValidationEmployee(employee))
             {
-                garage.Employee.Sort();
+                employee.Sort();
                 int number = 1;
-                foreach (Employee employee in garage.Employee)
+                foreach (Employee emp in employee)
                 {
-                    Console.WriteLine($"{number}) " + employee.ToString());
+                    Console.WriteLine($"{number}) " + emp.ToString());
                     Console.WriteLine();
                     number++;
                 }
@@ -166,7 +165,7 @@ namespace Warehouse_infrastructure
         /// <param name="garage">object</param>
         public List<Employee> SearchEmployeesByNameAndSurname(Warehouse garage)
         {
-            if (validationService.ValidationEmployee(garage))
+            if (validationService.ValidationEmployee(garage.Employee))
             {
                 int number = 0;
                 Console.WriteLine($"Enter employee '{nameof(Employee.Name)}' and '{nameof(Employee.Surname)}' to find");
@@ -175,13 +174,11 @@ namespace Warehouse_infrastructure
                 Console.Write($"Enter '{nameof(Employee.Surname)}': ");
                 string surname = validationService.TrySetValue(Console.ReadLine(), nameof(Employee.Surname));
                 List<Employee> searchedEntities = new List<Employee>();
-                for (int i = 0; i < garage.Employee.Count; i++)
+                foreach (var employee in garage.Employee)
                 {
-                    Employee employee = garage.Employee[i];
                     if (employee.Name == name && employee.Surname == surname)
                     {
                         searchedEntities.Add(employee);
-                        searchedEntities[number] = garage.Employee[i];
                         Console.WriteLine($"{number + 1}) {employee.ToString()}");
                         number++;
                     }
@@ -205,9 +202,9 @@ namespace Warehouse_infrastructure
         /// <param name="garage">object</param>
         public void RemoveEmployee(Warehouse garage)
         {
-            if (validationService.ValidationEmployee(garage))
+            if (validationService.ValidationEmployee(garage.Employee))
             {
-                DisplayWarehouseEmployee(garage);
+                DisplayWarehouseEmployee(garage.Employee);
                 Console.Write("Enter number which employee you need to fire: ");
                 string choice = Console.ReadLine();
                 if (int.TryParse(choice, out int intChoice))
@@ -228,7 +225,7 @@ namespace Warehouse_infrastructure
         /// <param name="garage">object</param>
         public void AddEmployee(Warehouse garage, Employee addedEmployee)
         {
-            if (validationService.ValidationEmployee(garage))
+            if (validationService.ValidationEmployee(garage.Employee))
             {
                 garage.Employee.Add(addedEmployee);
                 garage.UpdateVacancy(garage.Number_of_vacancy - 1);

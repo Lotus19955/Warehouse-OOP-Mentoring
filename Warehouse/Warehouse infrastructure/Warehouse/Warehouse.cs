@@ -46,7 +46,6 @@ namespace Warehouse_infrastructure
             get { return mailBox; }
             set { mailBox = value; }
         }
-        public Warehouse() { }
         public Warehouse(string title, string address, string number, int vacancy,Dictionary<string, List<Message>> mailBox)
         {
             this.Title = title;

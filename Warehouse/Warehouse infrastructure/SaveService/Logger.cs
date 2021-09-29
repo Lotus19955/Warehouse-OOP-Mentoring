@@ -17,8 +17,8 @@ namespace Warehouse_infrastructure
         Information,
         Warning,
         Error,
-        Critival,
-        Nine
+        Critical,
+        None
     }
     public abstract class LogBase
     {

@@ -28,17 +28,5 @@ namespace Warehouse_infrastructure.Tests
             //assert
             Assert.AreEqual(expected, actual);
         }
-        public void DisplayTest()
-        {
-            // arrange
-            string country = "Belarus";
-
-            //act
-            WarehouseService warehouseService = new WarehouseService();
-            warehouseService.Display(country, country);
-
-            //assert
-            
-        }
     }
 }

@@ -33,7 +33,6 @@ namespace Warehouse_infrastructure
             get { return body; }
             set { body = value; }
         }
-        public Message() { }
         public Message (string sender, List<Employee> receiver, string body)
         {
             this.Sender = sender;

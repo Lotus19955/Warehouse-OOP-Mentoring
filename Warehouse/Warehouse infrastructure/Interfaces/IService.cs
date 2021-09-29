@@ -8,6 +8,6 @@ namespace Warehouse_infrastructure
 {
     interface IService
     {
-        void Create  (Warehouse garage);
+        void CreateEmployee  (Warehouse garage);
     }
 }

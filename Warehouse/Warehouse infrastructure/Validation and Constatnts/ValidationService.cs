@@ -51,9 +51,9 @@ namespace Warehouse_infrastructure
         /// </summary>
         /// <param name="garage">object</param>
         /// <returns></returns>
-        public bool ValidationEmployee(Warehouse garage)
+        public bool ValidationEmployee(List<Employee> employee)
         {
-            return garage.Employee != null && garage.Employee.Count > 0;
+            return employee != null && employee.Count > 0;
         }
         public void ValidationSavingPath(string savePath)
         {

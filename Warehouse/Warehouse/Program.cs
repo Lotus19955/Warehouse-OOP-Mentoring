@@ -21,8 +21,6 @@ namespace WarehouseOOPMentoring
         private static Logger logger = new Logger();
         private static FolderService folderService = new FolderService();
         private static MessageService messageService = new MessageService();
-        
-
         private static void Main(string[] args)
         {
             try
@@ -30,7 +28,7 @@ namespace WarehouseOOPMentoring
                 folderService.DownloadWarehouseData(ref garage, nameof(Warehouse));
                 if (garage == null)
                 {
-                    warehouseService.Create(ref garage);
+                   garage = warehouseService.Create(garage);
                 }
                 folderService.DownloadEmployeeData(garage, nameof(Employee));
                 folderService.DownloadMailData(garage, nameof(garage.MailBox), nameof(garage.MailBox));
@@ -40,7 +38,6 @@ namespace WarehouseOOPMentoring
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                logger.Log(ex.Message, LogLevel.Error);
             }
             finally
             {
@@ -82,7 +79,7 @@ namespace WarehouseOOPMentoring
                         break;
                     case 4:
                         ClearInfoAboutWarehouse(ref garage);
-                        garage = warehouseService.Create(ref garage);
+                        warehouseService.CreateEmployee(garage);
                         break;
                     case 5:
                         TimeMenu();
@@ -120,19 +117,19 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    warehouseService.UpdateTitle(ref garage);
+                    warehouseService.UpdateTitle(garage);
                     UpdateMenu(garage);
                     break;
                 case 2:
-                    warehouseService.UpdateAddress(ref garage);
+                    warehouseService.UpdateAddress(garage);
                     UpdateMenu(garage);
                     break;
                 case 3:
-                    warehouseService.UpdateNumber(ref garage);
+                    warehouseService.UpdateNumber(garage);
                     UpdateMenu(garage);
                     break;
                 case 4:
-                    warehouseService.UpdateVacancy(ref garage);
+                    warehouseService.UpdateVacancy(garage);
                     UpdateMenu(garage);
                     break;
                 case 5:
@@ -150,12 +147,8 @@ namespace WarehouseOOPMentoring
         public static void DisplayMenu(Warehouse garage)
         {
             Console.WriteLine("\n\t Display Menu");
-            Console.WriteLine($"1 - Display '{nameof(garage.Title)}'");
-            Console.WriteLine($"2 - Display '{nameof(garage.Address)}'");
-            Console.WriteLine($"3 - Display 'Contact {nameof(garage.Contact_Number)}'");
-            Console.WriteLine($"4 - Display '{nameof(garage.Number_of_vacancy)}'");
-            Console.WriteLine($"5 - Display all information");
-            Console.WriteLine($"6 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
+            Console.WriteLine($"1 - Display all information");
+            Console.WriteLine($"2 - {AppConstants.Command.RETURN_TO_MAIN_MENU}");
             Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
@@ -164,26 +157,10 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    warehouseService.Display(garage.Title, nameof(garage.Title));
+                    Console.WriteLine(garage.ToString());
                     DisplayMenu(garage);
                     break;
                 case 2:
-                    warehouseService.Display(garage.Address, nameof(garage.Address));
-                    DisplayMenu(garage);
-                    break;
-                case 3:
-                    warehouseService.Display(garage.Contact_Number, nameof(garage.Contact_Number));
-                    DisplayMenu(garage);
-                    break;
-                case 4:
-                    DisplayFreeVacancy(garage);
-                    DisplayMenu(garage);
-                    break;
-                case 5:
-                    warehouseService.Display(garage);
-                    DisplayMenu(garage);
-                    break;
-                case 6:
                     break;
                 default:
                     Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
@@ -209,7 +186,7 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    employeeService.DisplayWarehouseEmployee(garage);
+                    employeeService.DisplayWarehouseEmployee(garage.Employee);
                     if (garage.Employee != null)
                     {
                         UpdateEmployeeInformationMenu(garage);
@@ -255,11 +232,11 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    employeeService.DisplayWarehouseEmployee(garage);
+                    employeeService.DisplayWarehouseEmployee(garage.Employee);
                     EmployeeMenu(garage);
                     break;
                 case 2:
-                    employeeService.Create(garage);
+                    employeeService.CreateEmployee(garage);
                     EmployeeMenu(garage);
                     break;
                 case 3:
@@ -275,19 +252,23 @@ namespace WarehouseOOPMentoring
                     EmployeeMenu(garage);
                     break;
                 case 6:
-                    employeeService.DisplayWarehouseEmployee(garage);
+                    employeeService.DisplayWarehouseEmployee(garage.Employee);
                     Employee selectedEmployeeToClone = employeeService.UpdateEmployeeInformation(garage);
                     Employee clonedEmployee = (Employee)selectedEmployeeToClone.Clone();
                     employeeService.AddEmployee(garage, clonedEmployee);
                     UpdateEmployeeInformationMenu(garage, new List<Employee> { clonedEmployee }, true);
                     break;
                 case 7:
-                    if (validationService.ValidationEmployee(garage))
+                    if (validationService.ValidationEmployee(garage.Employee))
                     {
                         MailMenu(garage);
+                        EmployeeMenu(garage);
                     }
-                    else { Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE); }
-                    EmployeeMenu(garage);
+                    else 
+                    { 
+                        Console.WriteLine(AppConstants.Alert.NO_OR_NULL_EMPLOYEE);
+                        EmployeeMenu(garage);
+                    }
                     break;
                 case 8:
                     Menu(garage);
@@ -358,7 +339,6 @@ namespace WarehouseOOPMentoring
                         Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
                         break;
                 }
-
             }
         }
         /// <summary>
@@ -379,7 +359,7 @@ namespace WarehouseOOPMentoring
             switch (number)
             {
                 case 1:
-                    messageService.MailToAll(garage);
+                    messageService.SendMail(garage);
                     break;
                 case 2:
                     messageService.ShowMail(garage.MailBox);

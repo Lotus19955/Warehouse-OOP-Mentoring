@@ -107,10 +107,6 @@ namespace Warehouse_infrastructure
             }
             catch(Exception)
             {
-                if (objectForSave == null)
-                {
-                    warehouseService.Create(ref objectForSave);
-                }
                 DownloadWarehouseData(ref objectForSave, downloadFolder);
             }
         }
@@ -143,7 +139,7 @@ namespace Warehouse_infrastructure
         /// <param name="downloadFolder">Choose from what folder you need to download</param>
         public void DownloadEmployeeData(Warehouse objectForSave, string downloadFolder)
         {
-            if (!validationService.ValidationEmployee(objectForSave))
+            if (!validationService.ValidationEmployee(objectForSave.Employee))
             {
                 objectForSave.Employee = new List<Employee>();
             }

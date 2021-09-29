@@ -21,7 +21,7 @@ namespace Warehouse_infrastructure.Tests
 
             //act
             EmployeeService employeeService = new EmployeeService();
-            employeeService.SortEmployeeByAge<int>(noSortArray);
+            employeeService.Sort<int>(noSortArray);
 
             //assert
             CollectionAssert.AreEqual(noSortArray, expectedSortArray);
