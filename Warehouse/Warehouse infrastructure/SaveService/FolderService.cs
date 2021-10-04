@@ -127,7 +127,7 @@ namespace Warehouse_infrastructure
                         Message savedMessage = (Message)Formatter.Deserialize(fs);
                         List<Message> listSavedMessage = new List<Message>();
                         listSavedMessage.Add(savedMessage);
-                        objectForSave.MailBox.Add($"{savedMessage.id}", listSavedMessage);
+                        objectForSave.MailBox.Add($"{savedMessage.mailid}", listSavedMessage);
                     }
                 }
             }

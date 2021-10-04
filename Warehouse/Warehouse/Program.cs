@@ -349,8 +349,9 @@ namespace WarehouseOOPMentoring
         {
             Console.WriteLine("\n\t Massage menu");
             Console.WriteLine($"1 - Send mail");
-            Console.WriteLine($"2 - Show sent message");
-            Console.WriteLine($"3 - {AppConstants.Command.RETURN}");
+            Console.WriteLine($"2 - Show all message");
+            Console.WriteLine($"3 - Show employee message");
+            Console.WriteLine($"4 - {AppConstants.Command.RETURN}");
             Console.Write(AppConstants.Command.ENTER_YOUR_CHOICE);
             string choise = Console.ReadLine();
             Console.WriteLine();
@@ -360,14 +361,21 @@ namespace WarehouseOOPMentoring
             {
                 case 1:
                     messageService.SendMail(garage);
+                    MailMenu(garage);
                     break;
                 case 2:
-                    messageService.ShowMail(garage.MailBox);
+                    messageService.ShowAllMail(garage.MailBox);
+                    MailMenu(garage);
                     break;
                 case 3:
+                    messageService.ShowMailForSpecificEmployee(garage.MailBox, garage);
+                    MailMenu(garage);
+                    break;
+                case 4:
                     break;
                 default:
                     Console.WriteLine(AppConstants.Alert.UNKNOWN_COMMAND);
+                    MailMenu(garage);
                     break;
             }
         }

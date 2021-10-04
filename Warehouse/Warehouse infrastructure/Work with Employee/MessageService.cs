@@ -12,6 +12,10 @@ namespace Warehouse_infrastructure
         private static ValidationService validationService = new ValidationService();
         private static EmployeeService employeeService = new EmployeeService();
         private static FolderService folderService = new FolderService();
+        /// <summary>
+        /// Adds message object to mailbox dictionary
+        /// </summary>
+        /// <param name="garage">gets object parameters</param>
         public void SendMail(Warehouse garage)
         {
             Message message = DataForMail(garage);
@@ -19,11 +23,16 @@ namespace Warehouse_infrastructure
             {
                 List<Message> listMessage = new List<Message>();
                 listMessage.Add(message);
-                garage.MailBox.Add($"{message.id}", listMessage);
-                folderService.SaveData(message, $"{message.id}", nameof(garage.MailBox));
+                garage.MailBox.Add($"{message.mailid}", listMessage);
+                folderService.SaveData(message, $"{message.mailid}", nameof(garage.MailBox));
                 Console.WriteLine("Message sent!");
             }
         }
+        /// <summary>
+        /// Create message object
+        /// </summary>
+        /// <param name="garage">gets object parameters</param>
+        /// <returns></returns>
         private Message DataForMail (Warehouse garage)
         {
             List<Employee> garageEmployee = new List<Employee>(garage.Employee);
@@ -44,13 +53,7 @@ namespace Warehouse_infrastructure
                 Console.WriteLine(garageEmployee.Count + 3 + ")" + AppConstants.Command.RETURN);
                 Console.Write($"Choose '{nameof(Message.Receiver)}' (enter number): ");
                 choice = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Employee));
-                if (choice > 0 && choice <= garageEmployee.Count)
-                {
-                    tempEmployee.Add(garageEmployee[choice - 1]);
-                    garageEmployee.RemoveAt(choice - 1);
-                    Console.Clear();
-                }
-                if (choice == garage.Employee.Count + 1)
+                if (choice == garageEmployee.Count + 1)
                 {
                     tempEmployee = garage.Employee;
                     Console.Clear();
@@ -70,6 +73,12 @@ namespace Warehouse_infrastructure
                 {
                     Console.WriteLine("Incorrect value");
                 }
+                if (choice > 0 && choice <= garageEmployee.Count)
+                {
+                    tempEmployee.Add(garageEmployee[choice - 1]);
+                    garageEmployee.RemoveAt(choice - 1);
+                    Console.Clear();
+                }
             }
             if (tempEmployee == null)
             {
@@ -78,30 +87,62 @@ namespace Warehouse_infrastructure
             else { message = new Message(sender, tempEmployee, body); }
             return message;
         }
-        public void ShowMail (Dictionary<string,List<Message>> mailBox)
+        /// <summary>
+        /// Show mail for all employees
+        /// </summary>
+        /// <param name="mailBox">gets object parameters</param>
+        public void ShowAllMail(Dictionary<string, List<Message>> mailBox)
         {
-            foreach (KeyValuePair<> item in collection)
+            foreach (KeyValuePair<string, List<Message>> mail in mailBox)
             {
-
-            }
-            if(mailBox != null)
-            {
-                for (int i = 0; i < mailBox.Count - 1; i++)
+                Console.WriteLine(mail.Key);
+                Console.WriteLine(nameof(Message.Body) + ": " + mail.Value[0].Body);
+                for (int i = 0; i < mail.Value.Count; i++)
                 {
-                    foreach (List <Message> mail in mailBox.Values)
+                    Console.Write(nameof(Message.Receiver) + ": ");
+                    for (int y = 0; y < mail.Value[i].Receiver.Count; y++)
                     {
-                        Console.WriteLine(nameof(Message.Sender) + ":" + $" {mail[i].Sender}") ;
-                        Console.Write(nameof(Message.Receiver) + ":");
-                        for (int y = 0; y < mail[i].Receiver.Count; y++)
+                        Console.Write(mail.Value[i].Receiver[y].Name + ", ");
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+        /// <summary>
+        /// Show mail for specific employee
+        /// </summary>
+        /// <param name="mailBox">gets object parameters</param>
+        /// <param name="garage">gets object parameters</param>
+        public void ShowMailForSpecificEmployee(Dictionary<string, List<Message>> mailBox, Warehouse garage)
+        {
+            employeeService.DisplayWarehouseEmployee(garage.Employee);
+            Console.WriteLine(garage.Employee.Count + 1 + ")" + AppConstants.Command.RETURN);
+            Console.WriteLine();
+            Console.Write($"Choose '{nameof(Message.Receiver)}' (enter number): ");
+            int choice = validationService.TrySetNumber(Console.ReadLine(), nameof(garage.Employee));
+            Console.Clear();
+            if (choice == garage.Employee.Count + 1)
+            { }
+            if (choice > 0 || choice <= garage.Employee.Count)
+            {
+                foreach (KeyValuePair<string, List<Message>> mail in mailBox)
+                {
+                    foreach (Message mes in mail.Value)
+                    {
+                        foreach (Employee emp in mes.Receiver)
                         {
-                            Console.Write($" {mail[i].Receiver[y].Name},");
+                            if (emp.id == garage.Employee[choice - 1].id)
+                            {
+                                Console.WriteLine(mail.Key);
+                                Console.WriteLine(nameof(Message.Body) + ": " + mail.Value[0].Body);
+                                Console.Write(nameof(Message.Receiver) + ": " + emp.Name);
+                                Console.WriteLine();
+                            }
                         }
-                        Console.WriteLine("\n" + nameof(Message.Body) + ":" + $" {mail[i].Body}");
-                        Console.WriteLine();
                     }
                 }
             }
-            else {Console.WriteLine($"{mailBox} is empty!");}
+            else { Console.WriteLine("Incorrect value");}
         }
     }
 }
