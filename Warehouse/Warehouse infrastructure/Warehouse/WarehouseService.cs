@@ -90,15 +90,6 @@ namespace Warehouse_infrastructure
         /// Display to console information about object
         /// </summary>
         /// <param name="param">gets object parameters</param>
-        /// <param name="paramName">gets 'Names' of object parameters</param>
-        public void Display(string param, string paramName)
-        {
-            Console.WriteLine($"Warehouse {paramName}: {param} ");
-        }
-        /// <summary>
-        /// Display to console information about object
-        /// </summary>
-        /// <param name="param">gets object parameters</param>
         public void Display(Warehouse garage)
         {
             Console.WriteLine(garage.ToString());

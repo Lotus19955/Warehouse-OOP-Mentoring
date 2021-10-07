@@ -390,14 +390,6 @@ namespace WarehouseOOPMentoring
             Console.WriteLine("Clear info success");
         }
         /// <summary>
-        /// Display to console informations about free vacancy 
-        /// </summary>
-        /// <param name="garage">object</param>
-        public static void DisplayFreeVacancy(Warehouse garage)
-        {
-            Console.WriteLine($"Number of free vacancy: {garage.Number_of_vacancy}");
-        }
-        /// <summary>
         /// Display to console runtime information
         /// </summary>
         public static void DisplayRunTime()

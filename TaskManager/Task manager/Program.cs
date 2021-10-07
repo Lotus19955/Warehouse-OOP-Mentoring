@@ -17,10 +17,9 @@ namespace Task_manager
                 TaskSolver(homeWork);
             } 
         }
-        public static Queue<string> TaskSolver(Queue<string> task)
+        public static void TaskSolver(Queue<string> task)
         {
             task.Dequeue();
-            return task;
         }
     }
 }
