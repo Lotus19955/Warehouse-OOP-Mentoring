@@ -55,7 +55,7 @@ namespace AppHistory
             }
             Console.WriteLine();
         }
-        public static Stack<string> Back(Stack<string> obj)
+        public static void Back(Stack<string> obj)
         {
             Console.Clear();
             forwardHistory.Push(obj.Pop());
@@ -64,16 +64,14 @@ namespace AppHistory
                 Console.WriteLine("You on site: " + obj.Peek());
             }
             else { Console.WriteLine("Home page"); }
-            return forwardHistory;
         }
-        public static Stack<string> Forward(Stack<string> obj)
+        public static void Forward(Stack<string> obj)
         {
             Console.Clear();
             {
                 Console.WriteLine("You on site: " + obj.Peek());
                 history.Push(obj.Pop());
             }
-            return history;
         }
     }
 }

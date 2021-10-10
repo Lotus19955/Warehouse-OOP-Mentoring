@@ -127,7 +127,7 @@ namespace Warehouse_infrastructure
                         Message savedMessage = (Message)Formatter.Deserialize(fs);
                         List<Message> listSavedMessage = new List<Message>();
                         listSavedMessage.Add(savedMessage);
-                        objectForSave.MailBox.Add($"{savedMessage.mailid}", listSavedMessage);
+                        objectForSave.MailBox.Add($"{savedMessage.id}", listSavedMessage);
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace Warehouse_infrastructure
                 List<Employee> savedEmployee = (List<Employee>)Formatter.Deserialize(fs);
                 foreach (Employee p in savedEmployee)
                 {
-                    objectForSave.Employee.Add(new Employee(p.Name, p.Surname, p.Age, p.Job, p.Address, p.Contact_Number, p.Education));
+                    objectForSave.Employee.Add(p);
                     objectForSave.UpdateVacancy(objectForSave.Number_of_vacancy - 1);
                 }
             }

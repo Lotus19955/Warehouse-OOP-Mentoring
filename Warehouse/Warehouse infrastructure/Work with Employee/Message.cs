@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 namespace Warehouse_infrastructure
 {
     [Serializable]
-    public class Message : Person, IMailid
+    public class Message : IHasId
     {
         private string sender;
         private List<Employee> receivers;
         private string body;
-        private Guid mailId;
-        public Guid mailid
+        private Guid Id;
+        public Guid id
         {
-            get { return mailId; }
-            set { mailId = Guid.NewGuid(); }
+            get { return Id; }
+            set { Id = Guid.NewGuid(); }
         }
         public string Sender
         {
@@ -38,7 +38,7 @@ namespace Warehouse_infrastructure
             this.Sender = sender;
             this.Receiver = receiver;
             this.Body = body;
-            this.mailid = Guid.NewGuid();
+            this.id = Guid.NewGuid();
         }
     }
 }

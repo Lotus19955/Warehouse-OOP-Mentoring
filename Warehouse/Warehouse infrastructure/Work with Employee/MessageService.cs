@@ -23,8 +23,8 @@ namespace Warehouse_infrastructure
             {
                 List<Message> listMessage = new List<Message>();
                 listMessage.Add(message);
-                garage.MailBox.Add($"{message.mailid}", listMessage);
-                folderService.SaveData(message, $"{message.mailid}", nameof(garage.MailBox));
+                garage.MailBox.Add($"{message.id}", listMessage);
+                folderService.SaveData(message, $"{message.id}", nameof(garage.MailBox));
                 Console.WriteLine("Message sent!");
             }
         }
